@@ -3,7 +3,30 @@
     include("includes/db.php");
     include("functions/functions.php");
 ?>
+<?php 
+    if(isset($_GET['p_id'])){
+        $p_id = $_GET['p_id'];
+        $get_pro = "select * from products where p_id=$p_id";
+        $run_pro = mysqli_query($db,$get_pro);
+        $row_pro = mysqli_fetch_array($run_pro);
+        $pro_cat_id = $row_pro['p_cat_id'];
+        $pro_title = $row_pro['p_title'];
+        $pro_price = $row_pro['p_price'];
+        $pro_img1 = $row_pro['p_img1'];
+        $pro_img2 = $row_pro['p_img2'];
+        $pro_img3 = $row_pro['p_img3'];
+        $pro_color1 = $row_pro['p_color1'];
+        $pro_color2 = $row_pro['p_color2'];
+        $pro_color3 = $row_pro['p_color3'];
+        $pro_total_item = $row_pro['p_total_count'];
 
+        $get_p_cat = "select * from product_categories where p_cat_id = $pro_cat_id";
+        $run_p_cat = mysqli_query($db,$get_p_cat);
+        $row_p_cat = mysqli_fetch_array($run_p_cat);
+        $p_cat_id = $row_p_cat['p_cat_id'];
+        $p_cat_title = $row_p_cat['p_cat_title'];
+    }
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,6 +37,8 @@
     <title>Online Store</title>
     <link rel="stylesheet" href="styles/bootstrap-337.min.css">
     <link rel="stylesheet" href="font-awsome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/44f64a1e4a.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles/style.css">
 </head>
 
@@ -26,8 +51,6 @@
 
             <!-- col-md-6 offer Begin -->
             <div class="col-md-6 offer">
-
-
                 <a href="#" class="btn btn-success btn-sm">Welcome</a>
                 <a href="checkout.php">4 Items In Your Cart | Total Price: $300 </a>
 
@@ -216,16 +239,24 @@
             <div class="col-md-12"><!--col-md-12 breadcrumb start-->
                 <ul class="breadcrumb">
                     <li><a href="index.php">Home</a></li>
-                    <li>Shop</li>
+                    <li><a href="shop.php"> Shop</a></li>
+                    <li>
+                        <a href="shop.php?p_cat_id=<?php echo $p_cat_id ?>">
+                            <?php 
+                                echo $p_cat_title;
+                            ?>
+                        </a>
+                    </li>
+                    <li>
+                        <?php 
+                            echo $pro_title;
+                        ?>
+                    </li>
                 </ul>
             </div><!--col-md-12 breadcrumb end-->
-            <div class="col-md-3"><!--col-md-3 start-->
-                <?php 
-                    include("includes/sidebar.php")
-                ?>
-            </div><!--col-md-3 end-->
-            <div class="col-md-9"><!--col-md-9 start-->
-                <div class="row" id="productmain">
+            
+            <div class="col-md-12"><!--col-md-9 start-->
+                <div class="row responsive" id="productmain">
                     <div class="mainimage">
                         <div class="col-sm-6"><!--col-md-6 start-->
                             <div id="my_carousel" class="carousel slide " style="height: 530px;" data-ride="carousel">
@@ -237,17 +268,17 @@
                                 <div class="carousel-inner"><!--carousel inner start-->
                                     <div class="item active">
                                         <center>
-                                        <img src="admin_area/product_images/images.jpg"  class="img-responsive">
+                                        <img src="admin_area/product_images/upload_image/<?php echo $pro_img1 ?>"  class="img-responsive" height="800px"; width="530px";>
                                         </center>
                                     </div>
                                     <div class="item">
                                         <center>
-                                        <img src="admin_area/product_images/images_1.jpg" class="img-responsive">
+                                        <img src="admin_area/product_images/upload_image/<?php echo $pro_img2 ?>" class="img-responsive" height="800px"; width="530px";>
                                         </center>
                                     </div>
                                     <div class="item">
                                         <center>
-                                        <img src="admin_area/product_images/images_2.jpg" class="img-responsive">
+                                        <img src="admin_area/product_images/upload_image/<?php echo $pro_img3 ?>" class="img-responsive" height="800px"; width="530px";>
                                         </center>
                                     </div>
                                 </div><!--carousel inner end-->
@@ -264,118 +295,499 @@
                         </div><!--col-md-6 end-->
                         <div class="col-sm-6"><!--col-md-6-->
                             <div class="box">
-                                <h1 class="text-center">Mens Short Sleeve t-shirt</h1>
-                                <form action="post" class="form-horizontal" action="details.php">
+                                <h1 class="text-center"><?php echo $pro_title?></h1><br>
+                                <form method="post" class="form-horizontal" action="" enctype="multipart/form-data">
                                     <div class="form-group">
-                                        <label  class="col-md-5 control-label">Product Quality</label>
+                                        <label  class="col-md-5 control-label">Product Quantity :</label>
                                         <div class="col-md-7">
-                                            <select name="product_qty"class="form-control">
+                                            <select name="product_qty"class="form-control" style="width: 200px;">
                                                 <option>1</option>
                                                 <option>2</option>
                                                 <option>3</option>
                                                 <option>4</option>
                                                 <option>5</option>
+                                                <option>6</option>
+                                                <option>7</option>
+                                                <option>8</option>
+                                                <option>9</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label  class="col-md-5 control-label">Product Size</label>
-                                        <div class="col-md-7">
-                                            <select name="product_size"class="form-control">
-                                                <option>Select a size</option>
-                                                <option>Small</option>
-                                                <option>Medium</option>
-                                                <option>Large</option>
-                                                <option>Extra Large</option>
-                                            </select>
+                                        <label  class="col-md-5 control-label">Color : </label>
+                                        <div class="col-md-7" style="margin-top: 5px;">
+                                            <?php 
+                                                if($pro_color1!=NULL && $pro_color2!=NULL && $pro_color3!=NULL){
+                                                    echo "<input type='radio' name='product_color'> <b>$pro_color1</b>";
+                                                    echo "<input type='radio' name='product_color' style='margin-left:10px;'> <b>$pro_color2</b>";
+                                                    echo "<br>";
+                                                    echo "<input type='radio' name='product_color'> <b>$pro_color3</b>";
+                                                }
+                                                else if($pro_color1!=NULL && $pro_color2!=NULL && $pro_color3==NULL){
+                                                    echo "<input type='radio' name='product_color'> <b>$pro_color1</b>";
+                                                    echo "<input type='radio' name='product_color' style='margin-left:10px;'> <b>$pro_color2</b>";
+                                                } 
+                                                else{
+                                                    echo "<input type='radio' name='product_color'> <b>$pro_color1</b>";
+                                                }
+                                            ?>                                                                                            
                                         </div>
                                     </div>
-                                    <p class="price text-center" style="font-size:28px;">Product Price : Tk 300</p>
-                                    <p class="text-center" style="font-size: 20px; color:green;">2 items in stock</p>
+                                    <p class="price text-center" style="font-size:28px;">Product Price : Tk <?php echo $pro_price ?></p>
+                                    
                                     <p class="text-center buttons">
                                         <button class="btn btn-primary">
                                             <i class="fa fa-shopping-cart"></i>&nbsp;Add to Cart
                                         </button>
                                         <button class="btn btn-primary">
-                                            <i class="fa fa-heart"></i>&nbsp;Add to wishlist
+                                            <i class="fa fa-heart" style="color: #ff0000;"></i>&nbsp;Add to wishlist
                                         </button>
                                     </p>
                                 </form>
                             </div><!--box end-->
                             <div class="col-xs-4">
-                                <a href="#" class="thumb">
-                                    <img class="img-thumbnail" src="admin_area/product_images/images.jpg"  class="img-responsive">
+                                <a href="javascript:void(0);" class="thumb">
+                                    <img class="img-thumbnail" src="admin_area/product_images/upload_image/<?php echo $pro_img1 ?>" height="200px" width="200px" class="img-responsive">
                                 </a>
                             </div>
                             <div class="col-xs-4">
-                                <a href="#" class="thumb">
-                                    <img class="img-thumbnail" src="admin_area/product_images/images_1.jpg"  class="img-responsive">
+                                <a href="javascript:void(0);" class="thumb">
+                                    <img class="img-thumbnail" src="admin_area/product_images/upload_image/<?php echo $pro_img2 ?>"  height="200px" width="200px" class="img-responsive">
                                 </a>
                             </div>
                             <div class="col-xs-4">
-                                <a href="#" class="thumb">
-                                    <img class="img-thumbnail" src="admin_area/product_images/images_2.jpg"  class="img-responsive">
+                                <a href="javascript:void(0);"  class="thumb">
+                                    <img class="img-thumbnail" src="admin_area/product_images/upload_image/<?php echo $pro_img3 ?>"  height="200px" width="200px"  class="img-responsive">
                                 </a>
                                 
                             </div>
                         </div><!--col-md-6 end-->
                     </div>
                 </div>
-                <div class="box" id="details">
-                    <h4>Product Details</h4>
-                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia animi eos error, architecto aspernatur, ut beatae voluptas nobis aliquam nostrum laboriosam, vero eius est voluptatem cumque ex fugiat vel dolore quos officia. Adipisci tempore dicta molestiae dolore obcaecati beatae corporis. Quam consequuntur quos eligendi! Possimus cupiditate, ipsam corrupti dicta dolores deleniti totam aliquam enim odio officia aspernatur reprehenderit nisi quidem!
+                <br> 
+                
+                <div class="box responsive" id="details"><!-- products details start-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="#/" style="text-decoration: none;"><h3>Product Details</h3></a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="#/" style="text-decoration: none;" data-toggle="modal" data-target="#review_modal"><h3>Review/Comments</h3></a>
+                        </div>
+                        <div class="modal fade" id="review_modal" role="dialog"><!-- review modal start-->
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class="modal-title">
+                                            <h3 class="text-center"><b><?php echo $pro_title ?></b> - Review/Comment</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="false"><span>&times;</span></button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="card">
+                                            <div class="card-text">
+                                                <h6><b style="margin-left: 80px;">ADD A REVIEW </b><br>Please post a user review only if you have / had this product<sup style="color: red;">*</sup></h6>
+                                            </div>
+                                            <!--<center>
+                                                <span class="fa fa-star fa-2x"></span>
+                                                <span class="fa fa-star fa-2x"></span>
+                                                <span class="fa fa-star fa-2x"></span>
+                                                <span class="fa fa-star fa-2x"></span>
+                                                <span class="fa fa-star fa-2x"></span>
+                                            </center>-->
+                                            <div class="card-body" style="margin-top: 30px;">
+                                                <form action="" method="post" enctype="multipart/form-data">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Rating <sup style="color: red;">***</sup></label>
+                                                        <select name="rating" class="form-control" required>
+                                                            <option> 5 </option>
+                                                            <option> 4 </option>
+                                                            <option> 3 </option>
+                                                            <option> 2 </option>
+                                                            <option> 1 </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Your Name <sup style="color: red;">*</sup></label>
+                                                        <input type="text" class="form-control" name="review_user_name" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Your Email <sup style="color: red;">*</sup></label>
+                                                        <input type="text" class="form-control" name="review_user_email" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Review Title <sup style="color: red;">*</sup></label>
+                                                        <input type="text" class="form-control" name="review_title" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Review Message </label>
+                                                        <textarea type="text" class="form-control" name="review_message" style="resize: vertical;"></textarea>
+                                                    </div>
+                                                    <center>
+                                                        <button  class="btn btn-success btn-lg" type="submit" name="review_submit">Add Review</button>
+                                                    </center>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- review modal end-->
 
-                    </p>
-                    <div class="box"><h4 class="text-center"><u>Size</u></h4>
-                    <ul>
-                        <li>Small</li>
-                        <li>Medium</li>
-                        <li>Large</li>
-                        <li>Extra Large</li>
-                    </ul></div>
-                </div>
+                    </div>
+                    <div class="table-respons">
+
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b> Launch</b></h4></th>
+                                    <th class="text-right"><i class=" fa fa-calendar" style="font-size: 17px;"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">Announced</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Status</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th  class="text-left"><h4 style="margin: 0;"><b>Network</b></h4></th>
+                                    <th class="text-right"><i class="fa fa-signal" aria-hidden="true" style="font-size: 17px;"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1" width="15%">Technology</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">2G Bands</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">3G Bands</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1"  width="15%">4G Bands</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">5G Bands</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1"  width="15%">Speed</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1"  width="15%">GPRS</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%"><b>EDGE</b></th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b>Body</b></h4></th>
+                                    <th class="text-right"><i class=" fa fa-mobile" style="font-size: 22px;"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">Dimensions</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Weight</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Build</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">SIM</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b>Display</b></h4></th>
+                                    <th class="text-right"><i class=" fa fa-desktop" style="font-size: 17px;"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">Type</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Size</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Resolution</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Multitouch</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Protection</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b>PlatForm</b></h4></th>
+                                    <th class="text-right"><i class="fa fa-microchip" style="font-size: 17px;" aria-hidden="true"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">OS</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Chipset</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">CPU</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">GPU</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b>Memory</b></h4></th>
+                                    <th class="text-right"><i class="fas fa-sd-card" style="font-size: 17px;"></i></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">Card Slot</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Internal</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">RAM</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b>Camera</b></h4></th>
+                                    <th class="text-right"><i class="fa fa-camera" style="font-size: 17px;"></i></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">Primary camera</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Secondary camera</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Features</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Video</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b>Sound</b></h4></th>
+                                    <th class="text-right"><i class="fa fa-music" style="font-size: 17px;"></i></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">Alert Type</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Loudspeaker</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">3.5mm Jack</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b>Connectivity</b></h4></th>
+                                    <th class="text-right"><i class="fa fa-bluetooth" style="font-size: 17px;"></i></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">WLAN</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Bluetooth</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">GPS</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">NFC</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">FM Radio</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">USB</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Infrared port</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b>Features</b></h4></th>
+                                    <th class="text-right"><i class="fa fa-envelope-open" style="font-size: 17px;"></i></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">Sensors</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Messaging</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Browser</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Java</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b>Battery</b></h4></th>
+                                    <th class="text-right"><i class="fa fa-battery-three-quarters" style="font-size: 17px;"></i></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">Battery Type</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Battery Capacity</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <table class="table table-bordered table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-left"><h4 style="margin: 0;"><b>More</b></h4></th>
+                                    <th class="text-right"><i class="fa fa-info-circle" style="font-size: 17px;"></i></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th colspan="1"  width="15%">Made By</th>
+                                    <td colspan="4">2019, November2019, November</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Color</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="1" width="15%">Other Features</th>
+                                    <td colspan="4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div> 
+                    
+                </div><!-- products details end-->
                 <div class="row same-height-row"><!--row same-height-row-->
                     <div class="col-md-3 col-sm-6"><!--col-md-3 col-sm-6-->
-                        <div class="box same-height headline" style="height: 310px;"><!--box same-height headline-->
-                            <h3 class="text-center">You also like these product</h3>
+                        <div class="box same-height headline" style="height: 410px;"><!--box same-height headline-->
+                            <h3 class="text-center" style="margin-top: 140px;"><a href="shop.php?p_cat_id=<?php echo $p_cat_id;?>"><b><?php echo $p_cat_title ?></b>
+                            </a><br> <div style="margin-top: 7px;">Related Phone</div></h3>
+                            <center>
+                                <i class="fa fa-arrow-right fa-3x"></i>
+                            </center>
                         </div><!--box same-height headline-->
                     </div><!--col-md-3 col-sm-6-->
-                    <div class="col-md-3 center-responsive">
-                        <div class="product same-height">
-                            <a href="details.php">
-                                <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                                </div>
-                                <p class="price">Tk 300</p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-md-3 center-responsive">
-                        <div class="product same-height">
-                            <a href="details.php">
-                                <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                                </div>
-                                <p class="price">Tk 300</p>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-md-3 center-responsive">
-                        <div class="product same-height">
-                            <a href="details.php">
-                                <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                                </a>
-                                <div class="text">
-                                    <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                                </div>
-                                <p class="price">Tk 300</p>
-                            </a>
-                        </div>
-                    </div>
+                    <?php 
+                        related_products();
+                    ?>
                 </div><!--row same-height-row-->
             </div><!--col-md-9 end-->
         </div>
@@ -385,7 +797,6 @@
         include("includes/footer.php");
     ?>
     <!--footer end--> 
-
     <script src="js/jquery-331.min.js"></script>
     <script src="js/bootstrap-337.min.js"></script>
 

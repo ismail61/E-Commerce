@@ -225,137 +225,95 @@
                 ?>
             </div>
             <div class="col-md-9"><!--col-md-9 start-->
-                <div class="box"><!--box start-->
-                    <h1>Shop</h1>
-                    <p>This theme is created by Md Ismail Hosen Raj..And Shreshtajit Das.We are studying in Sust</p>
-                </div><!--box end-->
+                <?php 
+                    if(!isset($_GET['p_cat_id'])){
+                        if(!isset($_GET['cat_id'])){
+                            echo "
+                                <div class='box'><!--box start-->
+                                    <h1 class='text-center' style='color:navy;'>SMART PHONE</h1>
+                                    <p style='font-style:italic; font-size:15px;'>Smartphone, also spelled smart phone, mobile telephone with a display screen (typically a liquid crystal display, or LCD), 
+                                        built-in personal information management programs (such as an electronic calendar and address book) typically found in a personal digital assistant (PDA),
+                                        and an operating system (OS) that allows other computer software to be installed for Web browsing, e-mail, music, video, and other applications. 
+                                    </p>
+                                </div><!--box end-->
+                            ";
+                        }
+                    }
+                ?>
+                
                 <div class="row"><!--row start-->
-                    <div class="col-md-4 col-sm-6 center-responsive"><!--col-md-4 col-sm-6 center responsive start-->
-                        <div class="product">
-                            <a href="details.php">
-                            <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                            </a>
-                            <div class="text">
-                                <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                            </div>
-                            <p class="price">Tk 300</p>
-                            <p class="buttons">
-                                <a href="details.php" class="btn btn-default">View Details</a>
-                                <a href="details.php" class="btn btn-primary">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Add to Cart
-                                </a>
-                            </p>
-                        </div>
-                    </div><!--col-md-4 col-sm-6 center responsive end-->
-                    <div class="col-md-4 col-sm-6 center-responsive"><!--col-md-4 col-sm-6 center responsive start-->
-                        <div class="product">
-                            <a href="details.php">
-                            <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                            </a>
-                            <div class="text">
-                                <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                            </div>
-                            <p class="price">Tk 300</p>
-                            <p class="buttons">
-                                <a href="details.php" class="btn btn-default">View Details</a>
-                                <a href="details.php" class="btn btn-primary">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Add to Cart
-                                </a>
-                            </p>
-                        </div>
-                    </div><!--col-md-4 col-sm-6 center responsive end-->
-                    <div class="col-md-4 col-sm-6 center-responsive"><!--col-md-4 col-sm-6 center responsive start-->
-                        <div class="product">
-                            <a href="details.php">
-                            <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                            </a>
-                            <div class="text">
-                                <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                            </div>
-                            <p class="price">Tk 300</p>
-                            <p class="buttons">
-                                <a href="details.php" class="btn btn-default">View Details</a>
-                                <a href="details.php" class="btn btn-primary">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Add to Cart
-                                </a>
-                            </p>
-                        </div>
-                    </div><!--col-md-4 col-sm-6 center responsive end-->
-                    <div class="col-md-4 col-sm-6 center-responsive"><!--col-md-4 col-sm-6 center responsive start-->
-                        <div class="product">
-                            <a href="details.php">
-                            <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                            </a>
-                            <div class="text">
-                                <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                            </div>
-                            <p class="price">Tk 300</p>
-                            <p class="buttons">
-                                <a href="details.php" class="btn btn-default">View Details</a>
-                                <a href="details.php" class="btn btn-primary">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Add to Cart
-                                </a>
-                            </p>
-                        </div>
-                    </div><!--col-md-4 col-sm-6 center responsive end-->
-                    <div class="col-md-4 col-sm-6 center-responsive"><!--col-md-4 col-sm-6 center responsive start-->
-                        <div class="product">
-                            <a href="details.php">
-                            <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                            </a>
-                            <div class="text">
-                                <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                            </div>
-                            <p class="price">Tk 300</p>
-                            <p class="buttons">
-                                <a href="details.php" class="btn btn-default">View Details</a>
-                                <a href="details.php" class="btn btn-primary">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Add to Cart
-                                </a>
-                            </p>
-                        </div>
-                    </div><!--col-md-4 col-sm-6 center responsive end-->
-                    <div class="col-md-4 col-sm-6 center-responsive"><!--col-md-4 col-sm-6 center responsive start-->
-                        <div class="product">
-                            <a href="details.php">
-                            <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                            </a>
-                            <div class="text">
-                                <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                            </div>
-                            <p class="price">Tk 300</p>
-                            <p class="buttons">
-                                <a href="details.php" class="btn btn-default">View Details</a>
-                                <a href="details.php" class="btn btn-primary">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Add to Cart
-                                </a>
-                            </p>
-                        </div>
-                    </div><!--col-md-4 col-sm-6 center responsive end-->
+                    <?php 
+                        if(!isset($_GET['p_cat_id'])){
+                            if(!isset($_GET['cat_id'])){
+                                $per_page = 6;
+                                if(isset($_GET['page'])){
+                                    $page = $_GET['page'];
+                                }
+                                else{
+                                    $page = 1;
+                                }
+                                $start_from = ($page-1) * $per_page;
+                                $get_products = "select * from products order by 1 DESC LIMIT $start_from , $per_page";
+                                $run_products = mysqli_query($db,$get_products);
+                                while($row_products = mysqli_fetch_array($run_products)){
+                                    $products_id = $row_products['p_id'];
+                                    $products_title = $row_products['p_title'];
+                                    $products_price = $row_products['p_price'];
+                                    $products_img = $row_products['p_img1'];    
+                                    echo "
+                                        <div class='col-md-4 col-sm-6 center-responsive' >
+                                            <div class='product'>
+                                                <a href='details.php?p_id=$products_id'>
+                                                    <img src='admin_area/product_images/upload_image/$products_img' class='img-responsive'>
+                                                </a>
+                                                <div class='text'>
+                                                    <h3><a href='details.php?p_id=$products_id'>$products_title</a></h3>
+                                                </div>
+                                                <p class='price'>Tk $products_price</p>
+                                                <p class='buttons'>
+                                                    <a href='details.php?p_id=$products_id' class='btn btn-default'>View Details</a>
+                                                    <a href='details.php?p_id=$products_id' class='btn btn-primary'>
+                                                        <i class='fa fa-shopping-cart' aria-hidden='true'></i>&nbsp;&nbsp;&nbsp;Add to Cart
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ";
+                                }
+                       
+                    ?>
                 </div><!--row end-->
                 <center>
                     <ul class="pagination">
-                        <li><a href="shop.php" class="active">First Page</a></li>
-                        <li>
-                            <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span class="sr-only">Previous</span>
-                            </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                            </a>
-                        </li>
-                        <li><a href="shop.php">1</a></li>
-                        <li><a href="shop.php">2</a></li>
-                        <li><a href="shop.php">3</a></li>
-                        <li><a href="shop.php">4</a></li>
-                        <li><a href="shop.php">Last Page</a></li>
+                        <?php 
+                            $query = "select * from products";
+                            $result = mysqli_query($db,$query);
+                            $total_records = mysqli_num_rows($result);
+                            $total_pages = ceil($total_records/$per_page);
+                            for($i=1 ; $i<=$total_pages ; $i++){
+                                if(!isset($_GET['page'])){
+                                    echo "<li><a href='shop.php?page=".$i."'>".$i."</a></li> ";    
+                                }
+                                else if(($_GET['page'])==$i){
+                                    echo "<li class='active'><a href='shop.php?page=".$i."'>".$i."</a></li> ";    
+                                }
+                                else{
+                                    echo "<li><a href='shop.php?page=".$i."'>".$i."</a></li> ";                                        
+                                }
+                            }
+
+                            }
+                        }
+                        
+                        ?>
                     </ul>
                 </center>
+                <?php 
+                    pro_cat_base_products();
+                    cat_base_products();
+                ?>
             </div><!--col-md-9 end-->
+            
         </div>
     </div>
     <!--footer start-->

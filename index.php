@@ -11,19 +11,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Online Store</title>
+    <title>Mobile Store</title>
     <link rel="stylesheet" href="styles/bootstrap-337.min.css">
     <link rel="stylesheet" href="font-awsome/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles/style.css">
 </head>
-
 <body>
     <!-- Top Begin -->
-    <div id="top" class="fixed-top">
+    <div id="top"  style="position: fixed; width:100%; z-index:5; top:0;">
 
         <!-- container Begin -->
         <div class="container">
-
             <!-- col-md-6 offer Begin -->
             <div class="col-md-6 offer">
 
@@ -60,17 +58,17 @@
 
     </div><!-- Top Finish -->
     <!-- navbar navbar-default Begin -->
-    <div id="navbar" class="navbar navbar-default fixed-top">
+    <div id="navbar" class="navbar navbar-default ">
 
         <!-- container Begin -->
-        <div class="container">
+        <div class="container" style="margin-top: 80px;" >
             <!-- navbar-header Begin -->
 
             <div class="navbar-header">
 
                 <!-- navbar-brand home Begin -->
 
-                <a href="index.php" class="navbar-brand home">
+                <a href="index.php" class="navbar-brand home" style="padding: 4px 15px;">
 
                     <img src="images/ecom-store-logo.png" alt="M-dev-Store Logo" class="hidden-xs">
                     <img src="images/ecom-store-logo-mobile.png" alt="M-dev-Store Logo Mobile" class="visible-xs">
@@ -128,7 +126,7 @@
             <div class="navbar-collapse collapse" id="navigation">
                 <!-- padding-nav Begin -->
 
-                <div class="padding-nav">
+                <div class="padding-nav" style="padding-top: 0px;">
 
                     <!-- nav navbar-nav left Begin -->
                     <ul class="nav navbar-nav left">
@@ -284,7 +282,7 @@
         <div class="container"><!--container start-->
             <div class="same-height-row"><!--same-height-row start-->
                 <div class="col-sm-4">
-                    <div class="box same-height"><!--box same-height start-->
+                    <div class="box same-height " style="height: 180px;"><!--box same-height start-->
                         <div class="icon">
                             <i class="fa fa-heart" aria-hidden="true"></i>
                         </div>
@@ -293,7 +291,7 @@
                     </div><!--box same-height end-->
                 </div>
                 <div class="col-sm-4">
-                    <div class="box same-height"><!--box same-height start-->
+                    <div class="box same-height" style="height: 180px;"><!--box same-height start-->
                         <div class="icon">
                             <i class="fa fa-heart" aria-hidden="true"></i>
                         </div>
@@ -302,7 +300,7 @@
                     </div><!--box same-height end-->
                 </div>
                 <div class="col-sm-4">
-                    <div class="box same-height"><!--box same-height start-->
+                    <div class="box same-height" style="height: 180px;"><!--box same-height start-->
                         <div class="icon">
                             <i class="fa fa-heart" aria-hidden="true"></i>
                         </div>
@@ -322,77 +320,19 @@
             </div>
         </div>
     </div><!-- hotbox end-->
+    
     <div class="container" id="content"><!--content start-->
-        <div class="row">
-            <div class="col-sm-4 col-sm-6 single">
-                <div class="product">
-                    <a href="details.php">
-                        <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                    </a>
-                    <div class="text">
-                        <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                    </div>
-                    <p class="price">Tk 300</p>
-                    <p class="buttons">
-                        <a href="details.php" class="btn btn-default">View Details</a>
-                        <a href="details.php" class="btn btn-primary">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Add to Cart
-                        </a>
-                    </p>
-                </div>
+        <center>
+            <div class="row">
+                <?php 
+                    getproducts();
+                    
+                ?>         
             </div>
-            <div class="col-sm-4 col-sm-6 single">
-                <div class="product">
-                    <a href="details.php">
-                        <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                    </a>
-                    <div class="text">
-                        <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                    </div>
-                    <p class="price">Tk 300</p>
-                    <p class="buttons">
-                        <a href="details.php" class="btn btn-default">View Details</a>
-                        <a href="details.php" class="btn btn-primary">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Add to Cart
-                        </a>
-                    </p>
-                </div>
-            </div>
-            <div class="col-sm-4 col-sm-6 single">
-                <div class="product">
-                    <a href="details.php">
-                        <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                    </a>
-                    <div class="text">
-                        <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                    </div>
-                    <p class="price">Tk 300</p>
-                    <p class="buttons">
-                        <a href="details.php" class="btn btn-default">View Details</a>
-                        <a href="details.php" class="btn btn-primary">
-                            <i class="fa fa-shopping-cart " aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Add to Cart
-                        </a>
-                    </p>
-                </div>
-            </div>
-            <div class="col-sm-4 col-sm-6 single">
-                <div class="product">
-                    <a href="details.php">
-                        <img src="admin_area/product_images/images.jpg" class="img-responsive">
-                    </a>
-                    <div class="text">
-                        <h3><a href="details.php">Mens Short Sleeve t-shirt</a></h3>
-                    </div>
-                    <p class="price">Tk 300</p>
-                    <p class="buttons">
-                        <a href="details.php" class="btn btn-default">View Details</a>
-                        <a href="details.php" class="btn btn-primary">
-                            <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;Add to Cart
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </div>
+        </center>
+        <center>
+            <a href="shop.php" style="margin-bottom: 10px;" class="btn btn-success btn-outline-danger"> More Products</a>
+        </center>  
     </div><!--content end-->
     <!--footer start-->
     <?php
