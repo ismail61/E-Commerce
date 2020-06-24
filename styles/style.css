@@ -68,9 +68,10 @@ body{
 .navbar-collapse .right{
     float: right;
 }
+
 .navbar-brand{
     float: left;
-    padding: 10px 15px;
+    padding: 4px 15px;
     font-size: 18px;
     line-height: 20px;
     height: 70px;
@@ -190,11 +191,23 @@ body{
         width:100%;
     }
 }
+@media(max-width:992px){
+    #content .row{
+        margin-left: 40px;
+    }
+}
 #content .product{
     background: #fff;
     border : solid 1px #e6e6e6;
-    box-sizing: border-box;
+    padding:4px;
     margin-bottom: 30px;
+    
+}
+#content .product:hover{
+    box-sizing: border-box;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.6); 
+    padding:5px;
+
 }
 #content .product .price {
     font-size: 18px;
@@ -249,9 +262,13 @@ body{
     text-align: center;
 }
 /* product Categories */
-#content .panel .sidebar-menu{
+#content .container .col-md-3 .sidebar-menu{
     box-sizing: border-box;
     box-shadow: 0 1px 5px rgba(0,0,0,0.5);
+}
+#content .con .col-md-3 .sidebar-menu .category-menu{
+  height: 550px;
+  overflow-y: auto;
 }
 
 /*breadcrumb*/
@@ -320,3 +337,23 @@ body{
 .box .order-table table tbody tr td{
     text-align: center;
 }
+
+/*details of products */
+
+#content .container .col-md-12 #details .row .col-md-6 h3{
+    margin-top: 3px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+#content .container .col-md-12 #details .table-respons table>tbody>tr>th{
+    background-color: #f7f7f7;
+    text-align: left;
+    color: #727374;
+}
+
+#content .container .col-md-12 #details .table-respons table>tbody>tr:hover{
+    background-color: #f1f1b1;
+}
+
+
+

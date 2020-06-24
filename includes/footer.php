@@ -22,7 +22,7 @@
                 <h4>Top Product Categories</h4>
                 <ul>
                     <?php 
-                        $get_top_pro_cat = "select * from product_categories";
+                        $get_top_pro_cat = "select * from product_categories LIMIT 0,7";
                         $run_top_pro_cat = mysqli_query($con,$get_top_pro_cat);
                         while ($row_top_pro_cat = mysqli_fetch_array($run_top_pro_cat)) {
                             $top_pro_cat_id = $row_top_pro_cat['p_cat_id'];
@@ -38,7 +38,7 @@
             <div class="col-sm-6 col-md-3"><!--col-sm-6 col-md-3 start-->
                 <h4>Where to find us</h4>
                 <p>
-                    <strong>online_shop.com</strong>
+                    <strong>mobile-shop.com</strong>
                     <br>Ismail Hosen Raj
                     <br>Shreshtajit Das
                     <br>Sylhet(SUST)
@@ -51,7 +51,7 @@
                 <h4>Get the more news</h4><br>
                 <h3>Stay with touch</h3>
                 <div class="social_link">
-                    <a href="https://www.facebook.com/hosen61" target="_blank"><i class="fa fa-facebook fa-2x" aria-hidden="true"></i></a>
+                    <a href="https://www.facebook.com/hosen61" target="_blank"><i class="fa fa-facebook-f fa-2x" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-twitter fa-2x" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-instagram fa-2x" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-google-plus fa-2x" aria-hidden="true"></i></a>
@@ -66,7 +66,7 @@
 <div id="copyright">
     <div class="container">
         <div class="col-md-12">
-            <p>&copy;&nbsp;All copyright are reserved</p>
+            <p>&copy;&nbsp;<?php echo date("Y")?> computer-shop.com | All Rights Reserved</p>
         </div>
     </div>
 </div>
