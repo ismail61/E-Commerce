@@ -1,0 +1,28 @@
+body{
+    background-color: #E0E0E0;
+    padding-top:10%;
+}
+.login-form{
+    max-width: 350px;
+    padding:50px;
+    border-radius: 50px;
+    background: rgb(98, 204, 98);
+    margin : 0 auto;
+}
+.container .login-form>h2{
+    color:#337ab7;
+}
+.container .login-form>h4>a{
+    color:rgb(90, 17, 17);
+}
+.container .login-form input[type="email"]{
+    margin-bottom: 5px;
+}
+.container .login-form input[type="password"]{
+    margin-bottom: 10px;
+}
+.container .login-form .form-control{
+    padding:10px;
+    box-sizing: border-box;
+    font-size: 15px;
+}

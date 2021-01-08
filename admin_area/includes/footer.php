@@ -30,7 +30,7 @@
             <div class="col-sm-6 col-md-3"><!--col-sm-6 col-md-3 start-->
                 <h4>Where to find us</h4>
                 <p>
-                    <strong>online_shop.com</strong>
+                    <strong>mobile_shop.com</strong>
                     <br>Ismail Hosen Raj
                     <br>Shreshtajit Das
                     <br>Sylhet(SUST)
