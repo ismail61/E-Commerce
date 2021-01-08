@@ -19,9 +19,7 @@ body{
 #top .offer{
     color: #ffffff;
 }
-#top .offer .btn{
-    text-transform: uppercase;
-}
+
 @media(max-width: 991px){
     #top .offer{
         margin-bottom: 10px;
@@ -206,7 +204,7 @@ body{
 #content .product:hover{
     box-sizing: border-box;
     box-shadow: 0 1px 5px rgba(0,0,0,0.6); 
-    padding:5px;
+    padding:4px;
 
 }
 #content .product .price {
@@ -312,6 +310,10 @@ body{
 }
 #content #cart .table tbody tr td,th{
     text-align: center;
+    padding-top: 3px;
+}
+#content #cart .table tbody tr td{
+    padding-top: 20px;
 }
 #content #cart .table tfoot tr th{
     text-align: left;

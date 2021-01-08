@@ -1,5 +1,14 @@
 <?php 
+    session_start();
+    if(!isset($_SESSION['customer_username'])){
+        echo "<script>window.open('../checkout.php','_self')</script>";
+    }
+    else{
     include("includes/db.php");
+    include("../functions/functions.php");
+    if(isset($_GET['order_id'])){
+        $order_id = $_GET['order_id'];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,8 +33,17 @@
             <div class="col-md-6 offer">
 
 
-                <a href="#" class="btn btn-success btn-sm">Welcome</a>
-                <a href="checkout.php">4 Items In Your Cart | Total Price: $300 </a>
+                <a href="" class="btn btn-success btn-sm">
+                    <?php 
+                        if(isset($_SESSION['customer_username'])){
+                            echo "WELCOME ".$_SESSION['customer_username'];
+                        }
+                        else{
+                            echo "WELCOME GUEST";
+                        }
+                    ?>
+                </a>
+                <a href="../checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?> </a>
 
             </div><!-- col-md-6 offer Finish -->
             <!-- col-md-6 Begin -->
@@ -39,13 +57,20 @@
                         <a href="../customer_register.php">Register</a>
                     </li>
                     <li>
-                        <a href="my_account.php">My Account</a>
+                        <a href="my_account.php?my_order">My Account</a>
                     </li>
                     <li>
                         <a href="../cart.php">Go To Cart</a>
                     </li>
                     <li>
-                        <a href="../checkout.php">Login</a>
+                        <?php 
+                            if(!isset($_SESSION['customer_username'])){
+                                echo " <a href='../checkout.php'>Login</a> ";
+                            }
+                            else{
+                                echo " <a href='../logout.php'>LogOut</a> ";
+                            }
+                        ?>
                     </li>
 
                 </ul><!-- menu Finish -->
@@ -137,7 +162,7 @@
                             <a href="../shop.php">Shop</a>
                         </li>
                         <li class="active">
-                            <a href="my_account.php">My Account</a>
+                            <a href="my_account.php?my_order">My Account</a>
                         </li>
                         <li>
                             <a href="../cart.php">Shopping Cart</a>
@@ -155,7 +180,7 @@
 
                     <i class="fa fa-shopping-cart"></i>
 
-                    <span>4 Items In Your Cart</span>
+                    <span><?php count_item(); ?> Item(s) In Your Cart</span>
 
                 </a><!-- btn navbar-btn btn-primary Finish -->
                 <!-- navbar-collapse collapse right Begin -->
@@ -211,7 +236,7 @@
         <div class="container">
             <div class="col-md-12"><!--col-md-12 breadcrumb start-->
                 <ul class="breadcrumb">
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="../index.php">Home</a></li>
                     <li>My Account</li>
                 </ul>
             </div><!--col-md-12 breadcrumb end-->
@@ -223,7 +248,7 @@
             <div class="col-md-9">
                 <div class="box">
                     <h1 class="text-center">Please Confirm your payment</h1>
-                    <form action="confirm.php" method="POST" enctype="multipart/form-data">
+                    <form action="confirm.php?order_id=<?php echo $order_id ?>" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label>Invoice Number :</label>
                             <input type="number" class="form-control" name="invoice_number" required>
@@ -234,7 +259,7 @@
                         </div>
                         <div class="form-group">
                             <label>Select Payment Method :</label>
-                            <select class="form-control" name="select_payment" required>
+                            <select class="form-control" name="payment_mode" required>
                                 <option>Bkash</option>
                                 <option>Rocket</option>
                                 <option>Nogod</option>
@@ -251,9 +276,43 @@
                             <input type="date" class="form-control" name="payment_date" required>
                         </div>
                         <div align="center">
-                            <button class="btn btn-success btn-lg">Confirm Payment</button>
+                            <button type="submit" name="payment" class="btn btn-success btn-lg">Confirm Payment</button>
                         </div>
                     </form>
+                    <?php 
+                        $customer_username = $_SESSION['customer_username'];
+                        if(isset($_POST['payment'])){
+                            
+                            $invoice_number = $_POST['invoice_number'];
+                            $amount = $_POST['amount'];
+                            $payment_mode = $_POST['payment_mode'];
+                            $transaction_id = $_POST['transaction_id'];
+                            $payment_date = substr($_POST['payment_date'],0,11);
+                            $get = "select customer_id from customer where customer_username='$customer_username'";
+                            $run = mysqli_query($db,$get);
+                            $row = mysqli_fetch_array($run);
+                            $customer_id = $row['customer_id'];
+                            $complete = "complete";
+
+                            $insert_payment = "INSERT INTO payment(invoice_number,amount,payment_mode,
+                                                transaction_id,payment_date,customer_id)
+                                                Values('$invoice_number','$amount','$payment_mode','$transaction_id',
+                                                '$payment_date','$customer_id');";
+                            
+                            $run_insert_payment = mysqli_query($db,$insert_payment);
+                            $update_order = "UPDATE customer_order set order_status = '$complete' where
+                             order_id = '$order_id' AND invoice_number='$invoice_number' AND customer_id = '$customer_id'";
+                            $run_update = mysqli_query($db,$update_order);
+                            if($run_update){
+                            $pending_order = "DELETE from pending_order where invoice_number = '$invoice_number' AND customer_id = '$customer_id'";
+                            $run_pending = mysqli_query($db,$pending_order);
+                            echo "<script>window.open('my_account.php?my_order','_self')</script>";
+                            }
+                            else{
+                                echo "<script>alert('Invoice Number doesn't match')</script>";
+                            }
+                        }
+                    ?>
                 </div>
             </div>
         </div>
@@ -271,3 +330,4 @@
 </body>
 
 </html>
+<?php } ?>

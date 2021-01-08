@@ -1,10 +1,18 @@
 <div class="panel panel-default sidebar-menu">
+    <?php 
+        $customer_username = $_SESSION['customer_username'];
+        $select_customer = "select customer_image,customer_name from customer where customer_username = '$customer_username'";
+        $run_customer = mysqli_query($db,$select_customer);
+        $row = mysqli_fetch_array($run_customer);
+        $customer_image = $row['customer_image'];
+        $customer_name = $row['customer_name'];
+    ?>
     <div class="panel-heading">
         <center >
-            <img src="customer_images/Ayan.jpg" class="img-responsive"  style="height: 300px;">
+            <img src="customer_images/upload/<?php echo $customer_image?>" class="img-responsive"  style="height: 300px;">
         </center>
         <h3 align="center" class=" panel-title" style="margin-top: 6px;">
-            Name : Ayan
+            Name : <?php echo $customer_name ?>
         </h3>
     </div>
     <div class="panel-body">
@@ -76,7 +84,7 @@
                         }
                     ?>
             ">
-                <a href="my_account.php?delete_account"><i class="fa fa-delete"></i>&nbsp;Delete Account</a>
+                <a href="my_account.php?delete_account"><i class="fa fa-trash"></i>&nbsp;Delete Account</a>
             </li>
             <li class="
                     <?php
@@ -86,7 +94,7 @@
                         }
                     ?>
             ">
-                <a href="my_account.php?logout"><i class="fa fa-sign-out"></i>&nbsp;Log Out</a>
+                <a href="../logout.php"><i class="fa fa-sign-out"></i>&nbsp;Log Out</a>
             </li>
 
         </ul>

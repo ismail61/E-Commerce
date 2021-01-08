@@ -44,14 +44,14 @@ function getproducts(){
         $products_img = $row_products['p_img1'];    
         echo "
             <div class='col-md-3 col-sm-6 center-responsive' >
-                <div class='product'>
-                    <a href='details.php?p_id=$products_id'>
-                        <img src='admin_area/product_images/upload_image/$products_img' class='img-responsive'>
+                <div class='product' style='height:440px;'>
+                    <a href='details.php?p_id=$products_id' style='height:300px;'>
+                        <img height='100px' width='100px' src='admin_area/product_images/upload_image/$products_img' class='img-responsive'>
                     </a>
                     <div class='text'>
                         <h3><a href='details.php?p_id=$products_id'>$products_title</a></h3>
-                    </div>
-                    <p class='price'>Tk $products_price</p>
+                    </div><br>
+                    <p class='price'>Tk $products_price</p><br>
                     <p class='buttons'>
                         <a href='details.php?p_id=$products_id' class='btn btn-default'>View Details</a>
                         <a href='details.php?p_id=$products_id' class='btn btn-primary'>
@@ -196,16 +196,10 @@ function related_products(){
         $p_cat_id = $row_query['p_cat_id'];
 
 
-        $get_pro = "select * from products where p_cat_id = $p_cat_id order by 1 DESC LIMIT 0,3";
+        $get_pro = "select * from products where p_cat_id = $p_cat_id order by 1 DESC LIMIT 1,4";
         $run_pro = mysqli_query($db,$get_pro);
         $count_pro = mysqli_num_rows($run_pro);
         if($count_pro==0){
-            echo "
-                <div class='box'>
-                    <h1 class='text-center'>OPPS</h1>
-                    <p>No Products Is Founded In This Products Category</p>
-                </div>
-            ";
         }
         else{
             while($row_pro = mysqli_fetch_array($run_pro)){
@@ -238,5 +232,299 @@ function related_products(){
     }
 }
 
+//rating 
+function user_rating($customer_name,$customer_email,$customer_id){
+    global $db;
+    if(isset($_POST['review_submit'])){
+        
+        $exists = true;         //rating not exists in this product
+        $p_id = $_GET['p_id'];
+        $rating = $_POST['rating'];
+        //$review_user_name  = $_POST['review_user_name'];
+        //$review_user_email = $_POST['review_user_email'];
+        $review_title = $_POST['review_title'];
+        $review_message = $_POST['review_message'];
+
+        $get_p_id = "select p_id from rating";
+        $run_p_id = mysqli_query($db,$get_p_id);
+        while($row_p_id = mysqli_fetch_array($run_p_id)){
+            $rating_p_id = $row_p_id['p_id'];
+            if($rating_p_id==$p_id){
+                $exists = false;            //rating already exists in this product
+                break;
+            }
+            else{
+                continue;
+            }
+        }
+            
+        if($exists) {
+
+            $insert_rating = "INSERT INTO rating(p_id,rating_number,total_rating_point,created_rating,modified_rating) 
+                            values('$p_id','1','$rating',NOW(),NOW());";
+            $run_insert_rating = mysqli_query($db,$insert_rating);
+            if($run_insert_rating){
+                $client_ip = get_client_ip();
+                $insert_review = "INSERT INTO user_review(p_id,ip_address,review_user_date,review_user_name,review_user_email,review_title,review_message,rating_point,customer_id) 
+                                    VALUES ('$p_id','$client_ip',NOW(),'$customer_name','$customer_email','$review_title','$review_message','$rating','$customer_id');";
+                $run_insert_review = mysqli_query($db,$insert_review);
+                if($run_insert_review){
+                    //echo "<script>alert('Inserted Rating successfully')</script>";
+                    echo "<script>window.open('details.php?p_id=$p_id','_self')</script>";
+                }
+                else{
+                    echo "<script>alert('Inserted Review Not successfully But ')</script>";
+
+                }
+            }
+            else{
+                echo "<script>alert('Inserted Rating  Not successfully')</script>";
+            }
+        }
+        else{
+
+            $get_p_idd = "select * from rating where p_id=$p_id";
+            $run_p_idd = mysqli_query($db,$get_p_idd);
+            $row_p_idd = mysqli_fetch_array($run_p_idd);
+            $rating_number = $row_p_idd['rating_number'] + 1;
+            $total_rating_point = $row_p_idd['total_rating_point'] + $rating;
+            $created_rating =$row_p_idd['created_rating'];
+            $update_rating ="UPDATE rating SET rating_number = '$rating_number' , total_rating_point ='$total_rating_point' ,
+                             created_rating = '$created_rating', modified_rating = NOW()
+                            where p_id=$p_id;
+                            ";
+            $run_update_query = mysqli_query($db,$update_rating);
+            if($run_update_query){
+                $client_ip = get_client_ip();
+                $insert_review = "INSERT INTO user_review(p_id,ip_address,review_user_date,review_user_name,review_user_email,review_title,review_message,rating_point,customer_id) 
+                VALUES ('$p_id','$client_ip',NOW(),'$customer_name','$customer_email','$review_title','$review_message',
+                '$rating','$customer_id');";
+                $run_insert_review = mysqli_query($db,$insert_review);
+                if($run_insert_review){
+                    //echo "<script>alert('Inserted Rating successfully')</script>";
+                    echo "<script>window.open('details.php?p_id=$p_id','_self')</script>";
+                }
+                else{
+                    echo "<script>alert('Inserted Review Not successfully ')</script>";
+
+                }
+                
+            }
+            else{
+                echo "<script>alert('Inserted Rating Not successfully')</script>";
+            }
+        }
+        
+    }
+}
+//check email
+function check_email($email_address){
+
+    $email = "$email_address";
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//add cart 
+function add_cart(){
+    global $db;
+    if(isset($_POST['cart_btn'])){
+        $p_id = $_GET['p_id'];
+        $product_quantity = $_POST['product_qty'];
+        $product_color = $_POST['product_color'];
+        $client_ip = get_client_ip();
+        $check = "select * from cart where ip_address = '$client_ip' AND p_id ='$p_id'";
+        $run_check = mysqli_query($db,$check);
+        $row_cart = mysqli_num_rows($run_check);
+        if($row_cart>0){
+            echo "<script>alert('This product is already added in your cart')</script>";
+            echo "<script>window.open('details.php?p_id=$p_id','_self')</script>";
+        }
+        else{
+            $insert_cart = "INSERT INTO cart(p_id,ip_address,product_quantity,product_color)
+                            VALUES('$p_id','$client_ip','$product_quantity','$product_color');";
+            $run_insert_cart = mysqli_query($db,$insert_cart);
+            if($run_insert_cart){
+                //echo "<script>alert('Inserted')</script>";
+                echo "<script>window.open('details.php?p_id=$p_id','_self')</script>";
+            }
+            else{
+                echo "<script>alert('Not Inserted')</script>";
+
+            }
+        }
+    }
+
+}
+//add wishlist
+
+function add_wishlist($customer_id){
+    global $db;
+    $p_id = $_GET['p_id'];
+    $product_quantity = $_POST['product_qty'];
+    $product_color = $_POST['product_color'];
+    $check = "SELECT * from wishlist where customer_id = '$customer_id' AND p_id ='$p_id'";
+    $run_check = mysqli_query($db,$check);
+    $row_count = mysqli_num_rows($run_check);
+    if($row_count>0){
+        echo "<script>alert('This product is already added in your wishlist')</script>";
+        echo "<script>window.open('details.php?p_id=$p_id','_self')</script>";
+    }
+    else if($row_count==0){
+        $insert_wishlist = "INSERT INTO wishlist(p_id,customer_id,product_quantity,product_color)
+                        VALUES('$p_id','$customer_id','$product_quantity','$product_color');";
+        $run_insert_wishlist = mysqli_query($db,$insert_wishlist);
+        if($run_insert_wishlist){
+            //echo "<script>alert('Inserted wishlist')</script>";
+            echo "<script>window.open('customer/my_account.php?my_wishlist','_self')</script>";
+        }
+        else{
+            echo "<script>alert('Not Inserted')</script>";
+
+        }
+            
+        }
+}
+//count item
+function count_item(){
+    global $db;
+    $client_ip = get_client_ip();
+    $get_item = "select * from cart where ip_address='$client_ip'";
+    $run_item = mysqli_query($db,$get_item);
+    $count_item = mysqli_num_rows($run_item);
+    echo $count_item;
+}
+//total price
+function total_price(){
+    global $db;
+    $total_price = 0;
+    $client_ip = get_client_ip();
+    $get_cart = "select * from cart where ip_address='$client_ip'";
+    $run_cart = mysqli_query($db,$get_cart);
+    while($row_cart = mysqli_fetch_array($run_cart)){
+        $p_id = $row_cart['p_id'];
+        $product_quantity = $row_cart['product_quantity'];
+        $get_price = "select p_price from products where p_id='$p_id'";
+        $run_price = mysqli_query($db,$get_price);
+        $row_price = mysqli_fetch_array($run_price);
+        $sub_price = $row_price['p_price'] * $product_quantity;
+        $total_price += $sub_price;
+    }
+    echo $total_price;
+}
+//update  cart
+function update_cart(){
+    global $db;
+    if(isset($_POST['update'])){
+        foreach ($_POST['remove'] as $remove_p_id) {
+            $delete_cart = "delete from cart where p_id=$remove_p_id";
+            $run_delete_cart = mysqli_query($db,$delete_cart);
+            if($run_delete_cart){
+                //echo "<script>alert('Updated Cart')</script>";
+                echo "<script>window.open('cart.php','_SELF')</script>";
+            }
+            else{
+                echo "<script>alert('Updated Cart Not Successfully')</script>";
+            }
+        }
+    }
+}
+// Function to get the client IP address
+function get_client_ip() {
+
+    $ip_address = '';
+
+    if (isset($_SERVER['HTTP_CLIENT_IP'])){
+        $ip_address = $_SERVER['HTTP_CLIENT_IP'];
+    }
+    else if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])){
+        $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+    else if(isset($_SERVER['HTTP_X_FORWARDED'])){
+        $ip_address = $_SERVER['HTTP_X_FORWARDED'];
+    }
+    else if(isset($_SERVER['HTTP_FORWARDED_FOR'])){
+        $ip_address = $_SERVER['HTTP_FORWARDED_FOR'];
+    }
+    else if(isset($_SERVER['HTTP_FORWARDED'])){
+        $ip_address = $_SERVER['HTTP_FORWARDED'];
+    }
+    else if(isset($_SERVER['REMOTE_ADDR'])){
+        $ip_address = $_SERVER['REMOTE_ADDR'];
+    }
+    else{
+        $ip_address = 'UNKNOWN';
+    }
+    return $ip_address;
+}
+
+//insert customer
+
+function insert_customer(){
+    global $db;
+    if(isset($_POST['submit'])){
+        $customer_name = $_POST['c_name'];
+        $customer_email = $_POST['c_email'];
+        $customer_phone = $_POST['c_phone'];
+        $customer_username = $_POST['c_username'];
+        $customer_password = $_POST['c_password'];
+        $customer_division = $_POST['c_division'];
+        $customer_district = $_POST['c_district'];
+        $customer_thana = $_POST['c_thana'];
+        $customer_address = $_POST['c_address'];
+        $customer_image = $_FILES['c_image']['name'];
+        $customer_image_size = $_FILES['c_image']['size'];
+        
+
+        $allowed = array(   "jpg" => "image/jpg",
+        "jpeg" => "image/jpeg", 
+        "gif" => "image/gif",
+        "png" => "image/png"
+        );
+        $ext1 = pathinfo($customer_image,PATHINFO_EXTENSION);
+        $max_size = 5 * 1024 * 1024;//// Verify file size - 5MB maximum
+
+        
+        // Verify file extension
+        if(!array_key_exists($ext1, $allowed)) {
+
+            echo "<script>alert('Error: Please select a valid file format.')</script>";
+        }
+        //// Verify file size
+        else if(($customer_image_size > $max_size)) {
+
+            echo "<script>alert('Error: File size is larger than the allowed limit.')</script>";
+        }
+        else{
+            $customer_image_tmp_name = $_FILES['c_image']['tmp_name'];
+            $client_ip = get_client_ip();
+            move_uploaded_file($customer_image_tmp_name,"customer/customer_images/upload/$customer_image");
+            $insert_customer = "INSERT INTO customer(customer_name,customer_email,customer_phone,customer_username,customer_password,customer_division,
+            customer_district,customer_thana,customer_address,customer_image,customer_ip_address)
+             values('$customer_name','$customer_email','$customer_phone','$customer_username','$customer_password','$customer_division'
+             ,'$customer_district','$customer_thana','$customer_address','$customer_image','$client_ip');";
+            $run_insert_customer = mysqli_query($db,$insert_customer);
+
+            $check_cart = "select * from cart where ip_address= $client_ip";
+            $run_check_cart = mysqli_query($db,$check_cart);
+            $cart_row = mysqli_num_rows($run_check_cart);
+            if($cart_row>0){
+                $_SESSION['customer_username'] = $customer_username;
+                echo "<script>alert('You have been registered successfully')</script>";
+                echo "<script>window.open('checkout.php','_self')</script>";
+            }
+            else{
+                $_SESSION['customer_username'] = $customer_username;
+                echo "<script>alert('You have been registered successfully')</script>";
+                echo "<script>window.open('index.php','_self')</script>";
+            }
+            
+        }
+        
+    }
+}
 
 ?>

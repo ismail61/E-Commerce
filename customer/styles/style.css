@@ -19,9 +19,6 @@ body{
 #top .offer{
     color: #ffffff;
 }
-#top .offer .btn{
-    text-transform: uppercase;
-}
 @media(max-width: 991px){
     #top .offer{
         margin-bottom: 10px;

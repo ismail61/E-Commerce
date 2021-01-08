@@ -1,5 +1,11 @@
 <?php 
+    session_start();
+    if(!isset($_SESSION['customer_username'])){
+        echo "<script>window.open('../checkout.php','_self')</script>";
+    }
+    else{
     include("includes/db.php");
+    include("../functions/functions.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,10 +28,17 @@
 
             <!-- col-md-6 offer Begin -->
             <div class="col-md-6 offer">
-
-
-                <a href="#" class="btn btn-success btn-sm">Welcome</a>
-                <a href="checkout.php">4 Items In Your Cart | Total Price: $300 </a>
+                <a href="" class="btn btn-success btn-sm">
+                    <?php 
+                        if(isset($_SESSION['customer_username'])){
+                            echo "WELCOME ".$_SESSION['customer_username'];
+                        }
+                        else{
+                            echo "WELCOME GUEST";
+                        }
+                    ?>
+                </a>
+                <a href="../checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?> </a>
 
             </div><!-- col-md-6 offer Finish -->
             <!-- col-md-6 Begin -->
@@ -39,13 +52,20 @@
                         <a href="../customer_register.php">Register</a>
                     </li>
                     <li>
-                        <a href="my_account.php">My Account</a>
+                        <a href="my_account.php?my_order">My Account</a>
                     </li>
                     <li>
                         <a href="../cart.php">Go To Cart</a>
                     </li>
                     <li>
-                        <a href="../checkout.php">Login</a>
+                        <?php 
+                            if(!isset($_SESSION['customer_username'])){
+                                echo " <a href='../checkout.php'>Login</a> ";
+                            }
+                            else{
+                                echo " <a href='../logout.php'>LogOut</a> ";
+                            }
+                        ?>
                     </li>
 
                 </ul><!-- menu Finish -->
@@ -137,7 +157,11 @@
                             <a href="../shop.php">Shop</a>
                         </li>
                         <li class="active">
-                            <a href="my_account.php">My Account</a>
+                            <?php 
+                                if(isset($_SESSION['customer_username'])){
+                                    echo "<a href='my_account.php?my_order'>My Account</a>";                                   
+                                }
+                            ?>  
                         </li>
                         <li>
                             <a href="../cart.php">Shopping Cart</a>
@@ -150,12 +174,12 @@
 
                 </div><!-- padding-nav Finish -->
                 <!-- btn navbar-btn btn-primary Begin -->
-                <a href="cart.php" class="btn navbar-btn btn-primary right">
+                <a href="../cart.php" class="btn navbar-btn btn-primary right">
 
 
                     <i class="fa fa-shopping-cart"></i>
 
-                    <span>4 Items In Your Cart</span>
+                    <span><?php count_item(); ?> Item(s) In Your Cart</span>
 
                 </a><!-- btn navbar-btn btn-primary Finish -->
                 <!-- navbar-collapse collapse right Begin -->
@@ -211,7 +235,7 @@
         <div class="container">
             <div class="col-md-12"><!--col-md-12 breadcrumb start-->
                 <ul class="breadcrumb">
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="../index.php">Home</a></li>
                     <li>My Account</li>
                 </ul>
             </div><!--col-md-12 breadcrumb end-->
@@ -256,6 +280,21 @@
                     }
                 ?>
                 <!--including delete_account.php page end-->
+                <!--including address.php page end-->
+                <?php 
+                    if(isset($_GET['my_address'])){
+                        include("address.php");
+                    }
+                ?>
+                <!--including address.php page end-->
+                
+                <!--including my_wishlist.php page end-->
+                <?php 
+                    if(isset($_GET['my_wishlist'])){
+                        include("my_wishlist.php");
+                    }
+                ?>
+                <!--including my_wishlist.php page end-->
                 
             </div><!-- col-md-9 account menu end-->
         </div>
@@ -273,3 +312,8 @@
 </body>
 
 </html>
+
+<?php 
+    }
+
+?>

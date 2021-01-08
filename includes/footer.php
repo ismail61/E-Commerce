@@ -8,7 +8,16 @@
                     <li><a href="cart.php">Shopping Cart</a></li>
                     <li><a href="contract.php">Contract Us</a></li>
                     <li><a href="shop.php">Shop</a></li>
-                    <li><a href="checkout.php">My Account</a></li>
+                    <li>
+                        <?php 
+                                if(!isset($_SESSION['customer_username'])){
+                                    echo "<a href='checkout.php'>My Account</a>";
+                                }
+                                else{
+                                    echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                                }
+                            ?>
+                    </li>
                 </ul>
                 <hr>
                 <h4>User Section</h4>
@@ -66,7 +75,7 @@
 <div id="copyright">
     <div class="container">
         <div class="col-md-12">
-            <p>&copy;&nbsp;<?php echo date("Y")?> computer-shop.com | All Rights Reserved</p>
+            <p>&copy;&nbsp;<?php echo date("Y")?> mobile-shop.com | All Rights Reserved</p>
         </div>
     </div>
 </div>
