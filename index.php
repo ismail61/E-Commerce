@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     include("includes/db.php");
     include("functions/functions.php");
 ?>
@@ -18,36 +19,54 @@
 </head>
 <body>
     <!-- Top Begin -->
-    <div id="top"  style="position: fixed; width:100%; z-index:5; top:0;">
+    <div id="top"  style="position: fixed; width:100%; z-index:5; top:0; ">
 
         <!-- container Begin -->
         <div class="container">
             <!-- col-md-6 offer Begin -->
             <div class="col-md-6 offer">
-
-
-                <a href="#" class="btn btn-success btn-sm">Welcome</a>
-                <a href="checkout.php">4 Items In Your Cart | Total Price: $300 </a>
-
+                
+                <a href="#" class="btn btn-success btn-sm">
+                    <?php 
+                        if(isset($_SESSION['customer_username'])){
+                            echo "WELCOME ".$_SESSION['customer_username'];
+                        }
+                        else{
+                            echo "WELCOME GUEST";
+                        }
+                    ?>
+                </a>
+                <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?> </a>
             </div><!-- col-md-6 offer Finish -->
             <!-- col-md-6 Begin -->
             <div class="col-md-6">
-
                 <!-- menu Begin -->
                 <ul class="menu">
-
-
                     <li>
                         <a href="customer_register.php">Register</a>
                     </li>
                     <li>
-                        <a href="customer/my_account.php">My Account</a>
+                        <?php 
+                            if(!isset($_SESSION['customer_username'])){
+                                echo "<a href='checkout.php'>My Account</a>";
+                            }
+                            else{
+                                echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                            }
+                        ?>
                     </li>
                     <li>
                         <a href="cart.php">Go To Cart</a>
                     </li>
                     <li>
-                        <a href="checkout.php">Login</a>
+                        <?php 
+                            if(!isset($_SESSION['customer_username'])){
+                                echo " <a href='checkout.php'>Login</a> ";
+                            }
+                            else{
+                                echo " <a href='logout.php'>LogOut</a> ";
+                            }
+                        ?>
                     </li>
 
                 </ul><!-- menu Finish -->
@@ -139,7 +158,14 @@
                             <a href="shop.php">Shop</a>
                         </li>
                         <li>
-                            <a href="customer/my_account.php">My Account</a>
+                            <?php 
+                                if(!isset($_SESSION['customer_username'])){
+                                    echo "<a href='checkout.php'>My Account</a>";
+                                }
+                                else{
+                                    echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                                }
+                            ?>
                         </li>
                         <li>
                             <a href="cart.php">Shopping Cart</a>
@@ -157,7 +183,7 @@
 
                     <i class="fa fa-shopping-cart"></i>
 
-                    <span>4 Items In Your Cart</span>
+                    <span><?php count_item(); ?> Items(s) In Your Cart</span>
 
                 </a><!-- btn navbar-btn btn-primary Finish -->
                 <!-- navbar-collapse collapse right Begin -->

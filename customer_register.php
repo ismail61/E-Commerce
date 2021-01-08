@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     include("includes/db.php");
     include("functions/functions.php");
 ?>
@@ -28,8 +29,17 @@
             <div class="col-md-6 offer">
 
 
-                <a href="#" class="btn btn-success btn-sm">Welcome</a>
-                <a href="checkout.php">4 Items In Your Cart | Total Price: $300 </a>
+                <a href="#" class="btn btn-success btn-sm">
+                    <?php 
+                        if(isset($_SESSION['customer_username'])){
+                            echo "WELCOME ".$_SESSION['customer_username'];
+                        }
+                        else{
+                            echo "WELCOME GUEST";
+                        }
+                    ?>
+                </a>
+                <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?></a>
 
             </div><!-- col-md-6 offer Finish -->
             <!-- col-md-6 Begin -->
@@ -43,13 +53,27 @@
                         <a href="customer_register.php">Register</a>
                     </li>
                     <li>
-                        <a href="checkout.php">My Account</a>
+                        <?php 
+                            if(!isset($_SESSION['customer_username'])){
+                                echo "<a href='checkout.php'>My Account</a>";
+                            }
+                            else{
+                                echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                            }
+                        ?>
                     </li>
                     <li>
                         <a href="cart.php">Go To Cart</a>
                     </li>
                     <li>
-                        <a href="checkout.php">Login</a>
+                        <?php 
+                            if(!isset($_SESSION['customer_username'])){
+                                echo " <a href='checkout.php'>Login</a> ";
+                            }
+                            else{
+                                echo " <a href='logout.php'>LogOut</a> ";
+                            }
+                        ?>
                     </li>
 
                 </ul><!-- menu Finish -->
@@ -141,7 +165,14 @@
                             <a href="shop.php">Shop</a>
                         </li>
                         <li>
-                            <a href="checkout.php">My Account</a>
+                            <?php 
+                                if(!isset($_SESSION['customer_username'])){
+                                    echo "<a href='checkout.php'>My Account</a>";
+                                }
+                                else{
+                                    echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                                }
+                            ?>
                         </li>
                         <li>
                             <a href="cart.php">Shopping Cart</a>
@@ -159,7 +190,7 @@
 
                     <i class="fa fa-shopping-cart"></i>
 
-                    <span>4 Items In Your Cart</span>
+                    <span><?php count_item(); ?> Item(s) In Your Cart</span>
 
                 </a><!-- btn navbar-btn btn-primary Finish -->
                 <!-- navbar-collapse collapse right Begin -->
@@ -221,57 +252,76 @@
             </div>
             <div class="row"><!--form-group row start-->
                 <div class="col-md-12 ">
-                    <div class="boQV x" >
-                        <div class="box-header"><!--box header start-->
+                    <div class="box" >
+                        <div class="box-header" style="margin-bottom: 4px;"><!--box header start-->
                             <center>
                                 <h2>Register A New Account</h2>
-                                <p>Already a&nbsp; Account.Please <a href="login.php">Log In</a>
+                                <p>
+                                    Already a&nbsp; Account.Please <a href="checkout.php"><b>Login</b></a>
                                 </p>
                             </center>
                         </div><!--box header end-->
-                        <form action="contact.php" method="post" enctype="multipart/form-data" class="form-horizontal" style="margin-top: 30px;">
+                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal" style="margin-top: 30px;">
                             <div class="form-group">
-                                <label class="control-label col-sm-2"><h4 style="margin:0;">Name:</h4></label>
+                                <label class="control-label col-sm-2"><h4 style="margin:0;" >Name :</h4></label>
                                 <div class="col-sm-10">
                                     <input type="text" name="c_name" class="form-control" required>
                                 </div>
                                 
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2"><h4 style="margin:0;"> Email:</h4></label>
+                                <label class="control-label col-sm-2"><h4 style="margin:0;"> Email :</h4></label>
                                 <div class="col-sm-10">
                                     <input type="email" name="c_email" class="form-control" required>
                                 </div>
                                 
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2"><h4 style="margin:0;">Phone No:</h4></label>
-                                <div class="col-sm-10">
-                                    <input type="number" name="c_phone_number" class="form-control" required>
+                                <label class="control-label col-sm-2"><h4 style="margin:0;">Phone :</h4></label>
+                                <div class="col-sm-10" style="margin-top: 3px;">
+                                    <input type="number" name="c_phone" class="form-control" required="required" minlength="11" maxlength="11">
                                 </div>
                                 
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2"><h4 style="margin:0;"> UserName:</h4></label>
+                                <label class="control-label col-sm-2"><h4 style="margin:0;"> UserName :</h4></label>
                                 <div class="col-sm-10">
                                     <input type="text" name="c_username" class="form-control" required>
                                 </div>
                                 
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2"><h4 style="margin:0;">Password:</h4></label>
+                                <label class="control-label col-sm-2"><h4 style="margin:0;">Password :</h4></label>
                                 <div class="col-sm-10">
                                     <input type="password" name="c_password" class="form-control" required>
                                 </div>   
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2"><h4 style="margin:0;">Address:</h4></label>
+                                <label class="control-label col-sm-2"><h4 style="margin:0;">Division :</h4></label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="c_division" class="form-control" required>
+                                </div>   
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2"><h4 style="margin:0;">District :</h4></label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="c_district" class="form-control" required>
+                                </div>   
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2"><h4 style="margin:0;">Thana :</h4></label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="c_thana" class="form-control" required>
+                                </div>   
+                            </div>                          
+                            <div class="form-group">
+                                <label class="control-label col-sm-2"><h4 style="margin:0;">Address :</h4></label>
                                 <div class="col-sm-10">
                                     <input type="text" name="c_address" class="form-control" required>
                                 </div>   
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2"><h4 style="margin:0;">Image:</h4></label>
+                                <label class="control-label col-sm-2"><h4 style="margin:0;">Image :</h4></label>
                                 <div class="col-sm-10">
                                     <input type="file" name="c_image" class="form-control" required>
                                 </div>   
@@ -280,6 +330,9 @@
                                 <button type="submit" name="submit" class="btn btn-primary">
                                     <i class="fa fa-sign-in"></i>&nbsp;Register
                                 </button>
+                            </div>
+                            <div class="text-right">
+                                By clicking "Register" I agree to <a href="privacy_policy.php" target="_blank"><b>Return & Privacy Policy</b></a> 
                             </div>
                         </form>
                     </div>
@@ -302,3 +355,6 @@
 </body>
 
 </html>
+<?php 
+    insert_customer();
+?>

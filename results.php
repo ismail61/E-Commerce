@@ -37,7 +37,7 @@
                         }
                     ?>
                 </a>
-                <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?> </a>
+                <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?></a>
 
             </div><!-- col-md-6 offer Finish -->
             <!-- col-md-6 Begin -->
@@ -156,7 +156,7 @@
                     <ul class="nav navbar-nav left">
 
 
-                        <li >
+                        <li  class="active">
                             <a href="index.php">Home</a>
                         </li>
                         <li>
@@ -175,7 +175,7 @@
                         <li>
                             <a href="cart.php">Shopping Cart</a>
                         </li>
-                        <li  class="active">
+                        <li>
                             <a href="contact.php">Contact Us</a>
                         </li>
 
@@ -245,56 +245,92 @@
             <div class="col-md-12"><!--col-md-12 breadcrumb start-->
                 <ul class="breadcrumb">
                     <li><a href="index.php">Home</a></li>
-                    <li>Contact</li>
+                    <li>
+                        <?php 
+                            if(isset($_GET['user_query'])){
+
+                                $user_query = $_GET['user_query'];
+                                echo "$user_query";
+                            }
+                        ?>
+                    </li>
                 </ul>
             </div><!--col-md-12 breadcrumb end-->
-            <div class="row"><!--form-group row start-->
-                <div class="col-md-2"></div>
-                <div class="col-md-8 ">
-                    <div class="box" >
-                        <div class="box-header"><!--box header start-->
-                            <center>
-                                <h2>Contact Us</h2>
-                                <p>If you have any questions , Please feel free to contact us.Our customer 
-                                    services center is working for you 24/7.
-                                </p>
-                            </center>
-                        </div><!--box header end-->
-                        <form action="contact.php" method="post" enctype="multipart/form-data" style="margin-top: 30px;">
-                            <div class="form-group">
-                                <label><h4 style="margin:0;">Name:</h4></label>
-                                <input type="text" name="name" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label><h4 style="margin:0;">Email:</h4></label>
-                                <input type="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label><h4 style="margin:0;">Subject:</h4></label>
-                                <input type="text" name="subject" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label><h4 style="margin:0;">Message:</h4></label>
-                                <textarea type="text" name="message" class="form-control" style="resize: vertical;" required></textarea>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" name="submit" class="btn btn-primary">
-                                    <i class="fa fa-user-md"></i>&nbsp;Send Message
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-md-2"></div>
-            </div><!--form-group row end-->
+            <div class="col-md-3">
+                <?php 
+                    include("includes/sidebar.php")
+                ?>
+            </div>
+            <div class="col-md-9"><!--col-md-9 start-->
+                <?php 
+                    if(!isset($_GET['p_cat_id'])){
+                        if(!isset($_GET['cat_id'])){
+                            
+                        }
+                    }
+                ?>
+                
+                <div class="row"><!--row start-->
+                    <?php 
+                        if(!isset($_GET['p_cat_id']) OR isset($_GET['search'])){
+                            if(!isset($_GET['cat_id']) OR isset($_GET['search'])){
+                                $user_query = mysqli_escape_string($db, $_GET['user_query']);
+                                $get_products = "SELECT * from products where p_title like '%$user_query%' OR p_id like '%$user_query%' 
+                                OR p_keyword like '%$user_query%' order by rand() LIMIT 0,9";
+                                $run_products = mysqli_query($con,$get_products);
+                                $count = mysqli_num_rows($run_products);
+                                if($count>0){
+                                    while($row_products = mysqli_fetch_array($run_products)){
+                                        $products_id = $row_products['p_id'];
+                                        $products_title = $row_products['p_title'];
+                                        $products_price = $row_products['p_price'];
+                                        $products_img = $row_products['p_img1'];    
+                                        echo "
+                                            <div class='col-md-4 col-sm-6 responsive' >
+                                                <div class='product' style='height:440px;'>
+                                                    <a href='details.php?p_id=$products_id'>
+                                                        <img height='100px' width='100px' src='admin_area/product_images/upload_image/$products_img' class='img-responsive'>
+                                                    </a>
+                                                    <div class='text'>
+                                                        <h3 style='margin:0;'><a href='details.php?p_id=$products_id'>$products_title</a></h3>
+                                                    </div>
+                                                    <br>
+                                                    <p class='price'>Tk $products_price</p>
+                                                    <br>
+                                                    <p class='buttons'>
+                                                        <a href='details.php?p_id=$products_id' class='btn btn-default'>View Details</a>
+                                                        <a href='details.php?p_id=$products_id' class='btn btn-primary'>
+                                                            <i class='fa fa-shopping-cart' aria-hidden='true'></i>&nbsp;&nbsp;&nbsp;Add to Cart
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ";
+                                    }
+                                }
+                                else{
+                                    echo "<div class='box'>
+                                        <H3 class='text-center'>No Products Found</H3>
+                                    </div>";
+                                }
+                            }
+                        }
+                       
+                    ?>
+                </div><!--row end-->
+                
+                <?php 
+                    pro_cat_base_products();
+                    cat_base_products();
+                ?>
+            </div><!--col-md-9 end-->
+            
         </div>
     </div>
     <!--footer start-->
-    <div style="margin-top: 40px;">
-        <?php
-            include("includes/footer.php");
-        ?>
-    </div>
+    <?php
+        include("includes/footer.php");
+    ?>
     <!--footer end--> 
 
     <script src="js/jquery-331.min.js"></script>

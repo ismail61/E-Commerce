@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     include("includes/db.php");
     include("functions/functions.php");
 ?>
@@ -26,10 +27,17 @@
 
             <!-- col-md-6 offer Begin -->
             <div class="col-md-6 offer">
-
-
-                <a href="#" class="btn btn-success btn-sm">Welcome</a>
-                <a href="checkout.php">4 Items In Your Cart | Total Price: $300 </a>
+                <a href="#" class="btn btn-success btn-sm">
+                    <?php 
+                        if(isset($_SESSION['customer_username'])){
+                            echo "WELCOME ".$_SESSION['customer_username'];
+                        }
+                        else{
+                            echo "WELCOME GUEST";
+                        }
+                    ?>
+                </a>
+                <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?></a>
 
             </div><!-- col-md-6 offer Finish -->
             <!-- col-md-6 Begin -->
@@ -43,13 +51,27 @@
                         <a href="customer_register.php">Register</a>
                     </li>
                     <li>
-                        <a href="checkout.php">My Account</a>
+                        <?php 
+                            if(!isset($_SESSION['customer_username'])){
+                                echo "<a href='checkout.php'>My Account</a>";
+                            }
+                            else{
+                                echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                            }
+                        ?>
                     </li>
                     <li>
                         <a href="cart.php">Go To Cart</a>
                     </li>
                     <li>
-                        <a href="checkout.php">Login</a>
+                        <?php 
+                            if(!isset($_SESSION['customer_username'])){
+                                echo " <a href='checkout.php'>Login</a> ";
+                            }
+                            else{
+                                echo " <a href='logout.php'>LogOut</a> ";
+                            }
+                        ?>
                     </li>
 
                 </ul><!-- menu Finish -->
@@ -141,7 +163,14 @@
                             <a href="shop.php">Shop</a>
                         </li>
                         <li>
-                            <a href="checkout.php">My Account</a>
+                            <?php 
+                                if(!isset($_SESSION['customer_username'])){
+                                    echo "<a href='checkout.php'>My Account</a>";
+                                }
+                                else{
+                                    echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                                }
+                            ?>
                         </li>
                         <li>
                             <a href="cart.php">Shopping Cart</a>
@@ -159,7 +188,7 @@
 
                     <i class="fa fa-shopping-cart"></i>
 
-                    <span>4 Items In Your Cart</span>
+                    <span><?php count_item(); ?> Item(s) In Your Cart</span>
 
                 </a><!-- btn navbar-btn btn-primary Finish -->
                 <!-- navbar-collapse collapse right Begin -->
@@ -262,14 +291,16 @@
                                     $products_img = $row_products['p_img1'];    
                                     echo "
                                         <div class='col-md-4 col-sm-6 center-responsive' >
-                                            <div class='product'>
+                                            <div class='product' style='height:440px;'>
                                                 <a href='details.php?p_id=$products_id'>
-                                                    <img src='admin_area/product_images/upload_image/$products_img' class='img-responsive'>
+                                                    <img height='100px' width='100px' src='admin_area/product_images/upload_image/$products_img' class='img-responsive'>
                                                 </a>
                                                 <div class='text'>
-                                                    <h3><a href='details.php?p_id=$products_id'>$products_title</a></h3>
+                                                    <h3 style='margin:0;'><a href='details.php?p_id=$products_id'>$products_title</a></h3>
                                                 </div>
+                                                <br>
                                                 <p class='price'>Tk $products_price</p>
+                                                <br>
                                                 <p class='buttons'>
                                                     <a href='details.php?p_id=$products_id' class='btn btn-default'>View Details</a>
                                                     <a href='details.php?p_id=$products_id' class='btn btn-primary'>

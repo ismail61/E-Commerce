@@ -1,11 +1,26 @@
 
 <?php 
+    session_start();
     include("includes/db.php");
     include("functions/functions.php");
+    
+    if(!isset($_GET['p_id'])){
+        echo "<script>window.open('shop.php','_self')</script>";
+    }
+    else{
+        
 ?>
+
 <?php 
     if(isset($_GET['p_id'])){
         $p_id = $_GET['p_id'];
+        $get_total_item = "select * from customer_order where p_id='$p_id' AND order_status = 'complete'";
+        $run_total_item = mysqli_query($db,$get_total_item);
+        $i=0;
+        while($row = mysqli_fetch_array($run_total_item)){
+            $p_qty = $row['product_quantity'];
+            $i+=$p_qty;
+        }
         $get_pro = "select * from products where p_id=$p_id";
         $run_pro = mysqli_query($db,$get_pro);
         $row_pro = mysqli_fetch_array($run_pro);
@@ -18,13 +33,72 @@
         $pro_color1 = $row_pro['p_color1'];
         $pro_color2 = $row_pro['p_color2'];
         $pro_color3 = $row_pro['p_color3'];
-        $pro_total_item = $row_pro['p_total_count'];
+        $pro_total_item = $row_pro['p_total_count']-$i;
+        if($pro_total_item<0){
+            $pro_total_item = 0;
+        }
+        $pro_description_id = $row_pro['description_id'];
 
+        //products category title collect
         $get_p_cat = "select * from product_categories where p_cat_id = $pro_cat_id";
         $run_p_cat = mysqli_query($db,$get_p_cat);
         $row_p_cat = mysqli_fetch_array($run_p_cat);
         $p_cat_id = $row_p_cat['p_cat_id'];
         $p_cat_title = $row_p_cat['p_cat_title'];
+
+        //products all description collect
+        $get_description = "select * from phone_description where description_id= $pro_description_id";
+        $run_description = mysqli_query($db,$get_description);
+        $row_description = mysqli_fetch_array($run_description);
+        $ph_l_announced = $row_description['ph_l_announced'];
+        $ph_l_status = $row_description['ph_l_status'];
+        $ph_n_technology = $row_description['ph_n_technology'];
+        $ph_n_2g_bands = $row_description['ph_n_2g_bands'];
+        $ph_n_3g_bands = $row_description['ph_n_3g_bands'];
+        $ph_n_4g_bands = $row_description['ph_n_4g_bands'];
+        $ph_n_5g_bands = $row_description['ph_n_5g_bands'];
+        $ph_n_speed = $row_description['ph_n_speed'];
+        $ph_n_gprs = $row_description['ph_n_gprs'];
+        $ph_n_edge = $row_description['ph_n_edge'];
+        $ph_b_dimensions = $row_description['ph_b_dimensions'];
+        $ph_b_weight = $row_description['ph_b_weight'];
+        $ph_b_build = $row_description['ph_b_build'];
+        $ph_b_sim = $row_description['ph_b_sim'];
+        $ph_d_type = $row_description['ph_d_type'];
+        $ph_d_size = $row_description['ph_d_size'];
+        $ph_d_resolution = $row_description['ph_d_resolution'];
+        $ph_d_multitouch = $row_description['ph_d_multitouch'];
+        $ph_d_protection = $row_description['ph_d_protection'];
+        $ph_p_os = $row_description['ph_p_os'];
+        $ph_p_chipset = $row_description['ph_p_chipset'];
+        $ph_p_cpu = $row_description['ph_p_cpu'];
+        $ph_p_gpu = $row_description['ph_p_gpu'];
+        $ph_m_card_slot = $row_description['ph_m_card_slot'];
+        $ph_m_internal = $row_description['ph_m_internal'];
+        $ph_m_ram = $row_description['ph_m_ram'];
+        $ph_c_primary_cam = $row_description['ph_c_primary_cam'];
+        $ph_c_secondary_cam = $row_description['ph_c_secondary_cam'];
+        $ph_c_features = $row_description['ph_c_features'];
+        $ph_c_video = $row_description['ph_c_video'];
+        $ph_s_alert_types = $row_description['ph_s_alert_types'];
+        $ph_s_loudspeaker = $row_description['ph_s_loudspeaker'];
+        $ph_s_35mm_jak = $row_description['ph_s_35mm_jak'];
+        $ph_c_wlan = $row_description['ph_c_wlan'];
+        $ph_c_bluetooth = $row_description['ph_c_bluetooth'];
+        $ph_c_gps = $row_description['ph_c_gps'];
+        $ph_c_nfc = $row_description['ph_c_nfc'];
+        $ph_c_fm_radio = $row_description['ph_c_fm_radio'];
+        $ph_c_usb = $row_description['ph_c_usb'];
+        $ph_c_infrared_port = $row_description['ph_c_infrared_port'];
+        $ph_f_sensors = $row_description['ph_f_sensors'];
+        $ph_f_messaging = $row_description['ph_f_messaging'];
+        $ph_f_browser = $row_description['ph_f_browser'];
+        $ph_f_java = $row_description['ph_f_java'];
+        $ph_b_type = $row_description['ph_b_type'];
+        $ph_b_capacity = $row_description['ph_b_capacity'];
+        $ph_m_made_by = $row_description['ph_m_made_by'];
+        $ph_m_color = $row_description['ph_m_color'];
+        $ph_m_others_features = $row_description['ph_m_others_features'];
     }
 ?>
 
@@ -37,12 +111,27 @@
     <title>Online Store</title>
     <link rel="stylesheet" href="styles/bootstrap-337.min.css">
     <link rel="stylesheet" href="font-awsome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/44f64a1e4a.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="styles/style.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 </head>
 
 <body>
+    
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#checkBtn').click(function() {
+      checked = $("input[type=radio]:checked").length;
+
+      if(!checked) {
+        alert("You must check at least one checkbox.");
+        return false;
+      }
+
+    });
+});
+
+</script>
     <!-- Top Begin -->
     <div id="top">
 
@@ -51,8 +140,17 @@
 
             <!-- col-md-6 offer Begin -->
             <div class="col-md-6 offer">
-                <a href="#" class="btn btn-success btn-sm">Welcome</a>
-                <a href="checkout.php">4 Items In Your Cart | Total Price: $300 </a>
+                <a href="#" class="btn btn-success btn-sm">
+                    <?php 
+                        if(isset($_SESSION['customer_username'])){
+                            echo "WELCOME ".$_SESSION['customer_username'];
+                        }
+                        else{
+                            echo "WELCOME GUEST";
+                        }
+                    ?>
+                </a>
+                <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?></a>
 
             </div><!-- col-md-6 offer Finish -->
             <!-- col-md-6 Begin -->
@@ -66,13 +164,27 @@
                         <a href="customer_register.php">Register</a>
                     </li>
                     <li>
-                        <a href="checkout.php">My Account</a>
+                        <?php 
+                            if(!isset($_SESSION['customer_username'])){
+                                echo "<a href='checkout.php'>My Account</a>";
+                            }
+                            else{
+                                echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                            }
+                        ?>
                     </li>
                     <li>
                         <a href="cart.php">Go To Cart</a>
                     </li>
                     <li>
-                        <a href="checkout.php">Login</a>
+                        <?php 
+                            if(!isset($_SESSION['customer_username'])){
+                                echo " <a href='checkout.php'>Login</a> ";
+                            }
+                            else{
+                                echo " <a href='logout.php'>LogOut</a> ";
+                            }
+                        ?>
                     </li>
 
                 </ul><!-- menu Finish -->
@@ -164,7 +276,14 @@
                             <a href="shop.php">Shop</a>
                         </li>
                         <li>
-                            <a href="checkout.php">My Account</a>
+                            <?php 
+                                if(!isset($_SESSION['customer_username'])){
+                                    echo "<a href='checkout.php'>My Account</a>";
+                                }
+                                else{
+                                    echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                                }
+                            ?>
                         </li>
                         <li>
                             <a href="cart.php">Shopping Cart</a>
@@ -182,7 +301,7 @@
 
                     <i class="fa fa-shopping-cart"></i>
 
-                    <span>4 Items In Your Cart</span>
+                    <span><?php count_item(); ?> Item(s) In Your Cart</span>
 
                 </a><!-- btn navbar-btn btn-primary Finish -->
                 <!-- navbar-collapse collapse right Begin -->
@@ -255,7 +374,7 @@
                 </ul>
             </div><!--col-md-12 breadcrumb end-->
             
-            <div class="col-md-12"><!--col-md-9 start-->
+            <div class="col-md-12"><!--col-md-12 start-->
                 <div class="row responsive" id="productmain">
                     <div class="mainimage">
                         <div class="col-sm-6"><!--col-md-6 start-->
@@ -296,11 +415,54 @@
                         <div class="col-sm-6"><!--col-md-6-->
                             <div class="box">
                                 <h1 class="text-center"><?php echo $pro_title?></h1><br>
-                                <form method="post" class="form-horizontal" action="" enctype="multipart/form-data">
+                                <?php 
+                                    $get_rating = "select total_rating_point,rating_number from rating where p_id=$p_id";
+                                    $run_rating = mysqli_query($db,$get_rating);
+                                    $row_rating = mysqli_fetch_array($run_rating);
+                                    $total_rating = $row_rating['total_rating_point'];
+                                    $rating_number = $row_rating['rating_number'];
+                                    if($rating_number==0){
+                                    }
+                                    else{
+                                        $avg_rating = number_format(($total_rating/$rating_number),1);
+                                        if($avg_rating>=3){
+                                            echo "   
+                                                <div class='text-center' style='font-size: 20px;'>
+                                                    <b>Rating</b> : <span style='color:blue;'><b>$avg_rating</b></span> out of 5 (Total $rating_number Review)
+                                                </div>
+                                            ";
+                                        }
+                                        else{
+                                            echo "   
+                                                <div class='text-center' style='font-size: 20px;'>
+                                                    <b>Rating</b> : <span style='color:red;'><b>$avg_rating</b></span> out of 5 (Total $rating_number Review)
+                                                </div>
+                                            ";
+                                        }
+                                        
+                                    }
+                                ?><br>
+                                <?php add_cart(); ?>
+                                <?php 
+                                    if(isset($_SESSION['customer_username'])){
+                                        $customer_username = $_SESSION['customer_username'];
+                                        $select = "SELECT customer_id from customer where customer_username = '$customer_username'";
+                                        $row = mysqli_fetch_array(mysqli_query(
+                                            $db,$select
+                                        ));
+                                        $customer_id = $row['customer_id'];
+                                        if(isset($_POST['add_wishlist'])){
+                                            add_wishlist($customer_id);
+                                        }
+                                    }
+                                     
+                                ?>
+                                <form method="post" class="form-horizontal" action="details.php?p_id=<?php echo $p_id ?>" enctype="multipart/form-data">
+                                    
                                     <div class="form-group">
                                         <label  class="col-md-5 control-label">Product Quantity :</label>
                                         <div class="col-md-7">
-                                            <select name="product_qty"class="form-control" style="width: 200px;">
+                                            <select name="product_qty" class="form-control" style="width: 200px;">
                                                 <option>1</option>
                                                 <option>2</option>
                                                 <option>3</option>
@@ -318,31 +480,61 @@
                                         <div class="col-md-7" style="margin-top: 5px;">
                                             <?php 
                                                 if($pro_color1!=NULL && $pro_color2!=NULL && $pro_color3!=NULL){
-                                                    echo "<input type='radio' name='product_color'> <b>$pro_color1</b>";
-                                                    echo "<input type='radio' name='product_color' style='margin-left:10px;'> <b>$pro_color2</b>";
+                                                    echo "<input type='radio' name='product_color' value='$pro_color1' checked> <b>$pro_color1</b>";
+                                                    echo "<input type='radio' name='product_color' value='$pro_color2' style='margin-left:10px;' > <b>$pro_color2</b>";
                                                     echo "<br>";
-                                                    echo "<input type='radio' name='product_color'> <b>$pro_color3</b>";
+                                                    echo "<input type='radio' name='product_color' value='$pro_color3' > <b>$pro_color3</b>";
                                                 }
                                                 else if($pro_color1!=NULL && $pro_color2!=NULL && $pro_color3==NULL){
-                                                    echo "<input type='radio' name='product_color'> <b>$pro_color1</b>";
-                                                    echo "<input type='radio' name='product_color' style='margin-left:10px;'> <b>$pro_color2</b>";
+                                                    echo "<input type='radio' name='product_color' value='$pro_color1'checked > <b>$pro_color1</b>";
+                                                    echo "<input type='radio' name='product_color' value='$pro_color2' style='margin-left:10px;' > <b>$pro_color2</b>";
                                                 } 
                                                 else{
-                                                    echo "<input type='radio' name='product_color'> <b>$pro_color1</b>";
+                                                    echo "<input type='radio' name='product_color' value='$pro_color1'checked > <b>$pro_color1</b>";
                                                 }
                                             ?>                                                                                            
                                         </div>
                                     </div>
                                     <p class="price text-center" style="font-size:28px;">Product Price : Tk <?php echo $pro_price ?></p>
-                                    
+                                    <?php 
+                                        if($pro_total_item!=0){
+                                            echo "<p class='text-center' style='font-size:23px; color:green;'>$pro_total_item  item(s) is available</p>";
+                                        }
+                                        else{
+                                            echo "<p class='text-center'  style='font-size:23px; color:red;'>Out of Stock</p>";
+                                        }
+                                    ?>
                                     <p class="text-center buttons">
-                                        <button class="btn btn-primary">
-                                            <i class="fa fa-shopping-cart"></i>&nbsp;Add to Cart
-                                        </button>
-                                        <button class="btn btn-primary">
-                                            <i class="fa fa-heart" style="color: #ff0000;"></i>&nbsp;Add to wishlist
-                                        </button>
+                                        <?php 
+                                            if($pro_total_item==0){
+                                                echo "<button class='btn btn-primary' type='submit' name='cart_btn' id='checkBtn' disabled>
+                                                        <i class='fa fa-shopping-cart'></i>&nbsp;Add to Cart
+                                                    </button>";
+                                            }
+                                            else{
+                                                echo "<button class='btn btn-primary' type='submit' name='cart_btn' id='checkBtn'>
+                                                        <i class='fa fa-shopping-cart'></i>&nbsp;Add to Cart
+                                                    </button>";
+                                            }
+                                        ?>
+                                        <?php 
+                                            if(isset($_SESSION['customer_username'])){
+                                        ?>
+                                            <button class="btn btn-primary" name="add_wishlist" type="submit" id="checkBtn">
+                                                <i class="fa fa-heart" style="color: #ff0000;"></i>&nbsp;Add to wishlist
+                                            </button>
+                                        <?php } 
+                                            else{
+                                        ?>
+                                            <button class="btn btn-primary">
+                                                <a href="checkout.php" style="color:white; text-decoration: none;">
+                                                <i class="fa fa-shopping-basket"></i>&nbsp;
+                                                Buy Now</a> 
+                                            </button>
+
+                                        <?php }?>
                                     </p>
+                                    
                                 </form>
                             </div><!--box end-->
                             <div class="col-xs-4">
@@ -372,31 +564,40 @@
                             <a href="#/" style="text-decoration: none;"><h3>Product Details</h3></a>
                         </div>
                         <div class="col-md-6">
-                            <a href="#/" style="text-decoration: none;" data-toggle="modal" data-target="#review_modal"><h3>Review/Comments</h3></a>
+                            <a href="#/" style="text-decoration: none;" data-toggle="modal" data-target="#review_modal"><h3>Review</h3></a>
                         </div>
+                        <?php 
+                            if(isset($_SESSION['customer_username'])){
+                                $select_customer = "SELECT customer_email,customer_name from customer where 
+                                customer_id = '$customer_id' AND customer_username = '$customer_username'";
+                                $run = mysqli_query($db,$select_customer);
+                                $row = mysqli_fetch_array($run);
+                                $customer_email = $row['customer_email'];
+                                $customer_name = $row['customer_name'];
+                        ?>
                         <div class="modal fade" id="review_modal" role="dialog"><!-- review modal start-->
                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <div class="modal-title">
-                                            <h3 class="text-center"><b><?php echo $pro_title ?></b> - Review/Comment</h3>
+                                            <h3 class="text-center"><b><?php echo $pro_title ?></b> - Review</h3>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="false"><span>&times;</span></button>
                                         </div>
                                     </div>
                                     <div class="modal-body">
                                         <div class="card">
-                                            <div class="card-text">
-                                                <h6><b style="margin-left: 80px;">ADD A REVIEW </b><br>Please post a user review only if you have / had this product<sup style="color: red;">*</sup></h6>
+                                            <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card-text col-md-8 pull-left">
+                                                    <h6><b style="margin-left: 80px;">ADD A REVIEW </b><br>Please post a user review only if you have / had this product<sup style="color: red;">*</sup></h6>
+                                                </div>
+                                                <h5 class=" col-md-4 text-right" style="margin-top: 17px;">
+                                                        To see <a href="reviews.php?p_id=<?php echo $p_id ?>"><b>All Review</b>  </a> 
+                                                </h5>
                                             </div>
-                                            <!--<center>
-                                                <span class="fa fa-star fa-2x"></span>
-                                                <span class="fa fa-star fa-2x"></span>
-                                                <span class="fa fa-star fa-2x"></span>
-                                                <span class="fa fa-star fa-2x"></span>
-                                                <span class="fa fa-star fa-2x"></span>
-                                            </center>-->
+                                            </div>
                                             <div class="card-body" style="margin-top: 30px;">
-                                                <form action="" method="post" enctype="multipart/form-data">
+                                                <form method="post" enctype="multipart/form-data" id="form">
                                                     <div class="form-group">
                                                         <label class="control-label">Rating <sup style="color: red;">***</sup></label>
                                                         <select name="rating" class="form-control" required>
@@ -409,30 +610,56 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label">Your Name <sup style="color: red;">*</sup></label>
-                                                        <input type="text" class="form-control" name="review_user_name" required>
+                                                        <input type="text" value="<?php echo $customer_username ?>" disabled class="form-control" name="review_user_name" required>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label">Your Email <sup style="color: red;">*</sup></label>
-                                                        <input type="text" class="form-control" name="review_user_email" required>
+                                                        <input type="email" value="<?php echo $customer_email ?>" class="form-control" name="review_user_email" disabled required>
+                                                        
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label">Review Title <sup style="color: red;">*</sup></label>
                                                         <input type="text" class="form-control" name="review_title" required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="control-label">Review Message </label>
-                                                        <textarea type="text" class="form-control" name="review_message" style="resize: vertical;"></textarea>
+                                                        <label class="control-label">Review Message <sup style="color: red;">*</sup> </label>
+                                                        <textarea type="text" class="form-control" name="review_message" style="resize: vertical;" required></textarea>
                                                     </div>
                                                     <center>
                                                         <button  class="btn btn-success btn-lg" type="submit" name="review_submit">Add Review</button>
                                                     </center>
+                                                    
                                                 </form>
+
+                                                
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div><!-- review modal end-->
+                        <?php
+                            user_rating($customer_name,$customer_email,$customer_id);
+                        ?>
+                        <?php } 
+                            else if(!isset($_SESSION['customer_username'])){                           
+                        ?>
+                        <div class="modal fade" id="review_modal" role="dialog"><!-- review modal start-->
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class="modal-title">
+                                            <h3 class="text-center"><b>Please <a href="checkout.php">login</a>  to review</b></h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="false"><span>&times;</span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- review modal end-->
+                        
+                        <?php } ?>
+
+                        
 
                     </div>
                     <div class="table-respons">
@@ -447,11 +674,11 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">Announced</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_l_announced ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Status</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_l_status ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -466,35 +693,50 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1" width="15%">Technology</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_n_technology ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">2G Bands</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_n_2g_bands ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">3G Bands</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_n_3g_bands ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1"  width="15%">4G Bands</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_n_4g_bands ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">5G Bands</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_n_5g_bands ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1"  width="15%">Speed</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_n_speed ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1"  width="15%">GPRS</th>
-                                    <td colspan="4"></td>
+                                    <?php 
+                                        if($ph_n_gprs==1){
+                                            echo "<td colspan='4' style='font-size:10px;'><i class='fa fa-check-square-o fa-2x' aria-hidden='true''></i></td>";
+                                        }
+                                        else if($ph_n_gprs==2){
+                                            echo "<td colspan='4' style='font-size:10px;' ><i class='fa fa-window-close-o fa-2x' aria-hidden='true''></i></td>";
+                                        }                                    
+                                    ?>
+                                    
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%"><b>EDGE</b></th>
-                                    <td colspan="4"></td>
+                                    <?php 
+                                        if($ph_n_edge==1){
+                                            echo "<td colspan='4' style='font-size:10px;'><i class='fa fa-check-square-o fa-2x' aria-hidden='true''></i></td>";
+                                        }
+                                        else if($ph_n_edge==2){
+                                            echo "<td colspan='4' style='font-size:10px;' ><i class='fa fa-window-close-o fa-2x' aria-hidden='true''></i></td>";
+                                        }                                    
+                                    ?>
                                 </tr>
                             </tbody>
                         </table>
@@ -509,19 +751,19 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">Dimensions</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_b_dimensions ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Weight</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_b_weight ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Build</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_b_build ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">SIM</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_b_sim ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -536,23 +778,30 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">Type</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_d_type?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Size</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_d_size ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Resolution</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_d_resolution ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Multitouch</th>
-                                    <td colspan="4"></td>
+                                    <?php 
+                                        if($ph_d_multitouch==1){
+                                            echo "<td colspan='4' style='font-size:10px;'><i class='fa fa-check-square-o fa-2x' aria-hidden='true''></i></td>";
+                                        }
+                                        else if($ph_d_multitouch==2){
+                                            echo "<td colspan='4' style='font-size:10px;' ><i class='fa fa-window-close-o fa-2x' aria-hidden='true''></i></td>";
+                                        }                                    
+                                    ?>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Protection</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_d_protection ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -567,19 +816,19 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">OS</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_p_os ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Chipset</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_p_chipset ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">CPU</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_p_cpu ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">GPU</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_p_gpu ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -595,15 +844,15 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">Card Slot</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_m_card_slot ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Internal</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_m_internal ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">RAM</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_m_ram ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -619,19 +868,19 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">Primary camera</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_c_primary_cam ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Secondary camera</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_c_secondary_cam ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Features</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_c_features ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Video</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_c_video ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -647,15 +896,22 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">Alert Type</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_s_alert_types ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Loudspeaker</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_s_loudspeaker ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">3.5mm Jack</th>
-                                    <td colspan="4"></td>
+                                    <?php 
+                                        if($ph_s_35mm_jak==1){
+                                            echo "<td colspan='4' style='font-size:10px;'><i class='fa fa-check-square-o fa-2x' aria-hidden='true''></i></td>";
+                                        }
+                                        else if($ph_s_35mm_jak==2){
+                                            echo "<td colspan='4' style='font-size:10px;' ><i class='fa fa-window-close-o fa-2x' aria-hidden='true''></i></td>";
+                                        }                                    
+                                    ?>
                                 </tr>
                             </tbody>
                         </table>
@@ -671,31 +927,53 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">WLAN</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_c_wlan ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Bluetooth</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_c_bluetooth ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">GPS</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_c_gps ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">NFC</th>
-                                    <td colspan="4"></td>
+                                    <?php 
+                                        if($ph_c_nfc==1){
+                                            echo "<td colspan='4' style='font-size:10px;'><i class='fa fa-check-square-o fa-2x' aria-hidden='true''></i></td>";
+                                        }
+                                        else if($ph_c_nfc==2){
+                                            echo "<td colspan='4' style='font-size:10px;' ><i class='fa fa-window-close-o fa-2x' aria-hidden='true''></i></td>";
+                                        }                                    
+                                        
+                                    ?>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">FM Radio</th>
-                                    <td colspan="4"></td>
+                                    <?php 
+                                        if($ph_c_fm_radio==1){
+                                            echo "<td colspan='4' style='font-size:10px;'><i class='fa fa-check-square-o fa-2x' aria-hidden='true''></i></td>";
+                                        }
+                                        else if($ph_c_fm_radio==2){
+                                            echo "<td colspan='4' style='font-size:10px;' ><i class='fa fa-window-close-o fa-2x' aria-hidden='true''></i></td>";
+                                        }                                    
+                                    ?>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">USB</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_c_usb ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Infrared port</th>
-                                    <td colspan="4"></td>
+                                    <?php 
+                                        if($ph_c_infrared_port==1){
+                                            echo "<td colspan='4' style='font-size:10px;'><i class='fa fa-check-square-o fa-2x' aria-hidden='true''></i></td>";
+                                        }
+                                        else if($ph_c_infrared_port==2){
+                                            echo "<td colspan='4' style='font-size:10px;' ><i class='fa fa-window-close-o fa-2x' aria-hidden='true''></i></td>";
+                                        }                                    
+                                    ?>
                                 </tr>
                             </tbody>
                         </table>
@@ -711,19 +989,26 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">Sensors</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_f_sensors ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Messaging</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_f_messaging ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Browser</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_f_browser ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Java</th>
-                                    <td colspan="4"></td>
+                                    <?php 
+                                        if($ph_f_java==1){
+                                            echo "<td colspan='4' style='font-size:10px;'><i class='fa fa-check-square-o fa-2x' aria-hidden='true''></i></td>";
+                                        }
+                                        else if($ph_f_java==2){
+                                            echo "<td colspan='4' style='font-size:10px;' ><i class='fa fa-window-close-o fa-2x' aria-hidden='true''></i></td>";
+                                        }                                    
+                                    ?>
                                 </tr>
                             </tbody>
                         </table>
@@ -739,11 +1024,11 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">Battery Type</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_b_type ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Battery Capacity</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_b_capacity ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -759,15 +1044,15 @@
                             <tbody>
                                 <tr>
                                     <th colspan="1"  width="15%">Made By</th>
-                                    <td colspan="4">2019, November2019, November</td>
+                                    <td colspan="4"><?php echo $ph_m_made_by ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Color</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_m_color ?></td>
                                 </tr>
                                 <tr>
                                     <th colspan="1" width="15%">Other Features</th>
-                                    <td colspan="4"></td>
+                                    <td colspan="4"><?php echo $ph_m_others_features ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -775,6 +1060,31 @@
                     </div> 
                     
                 </div><!-- products details end-->
+                
+                
+
+                <div class="row col-md-12 container">   
+                    <form method="post">
+                        <textarea placeholder="Comment Here..." name="comment" class="form-control" rows="5"></textarea>
+                        <?php 
+                            if(isset($_SESSION['customer_username'])){
+
+                            
+                        ?>
+                        <div class="pull-right" style="margin-top: 10px;margin-bottom:10px;">
+                            <button  class="btn btn-success btn-lg" type="submit" name="comment_submit"><span style="padding:10px;" class='text-center'>Comment</span></button>
+                        </div> 
+                        <?php } 
+                        else{
+
+                        ?>
+                        <div class="pull-right" style="margin-top: 10px;margin-bottom:10px;">
+                        <button  class="btn btn-success btn-lg"><a href="checkout.php" style="padding:10px; color:white" class='text-center'>Please Log In to Comment</a></button>
+                        </div>   
+                        <?php } ?>
+                    </form>
+                </div>
+
                 <div class="row same-height-row"><!--row same-height-row-->
                     <div class="col-md-3 col-sm-6"><!--col-md-3 col-sm-6-->
                         <div class="box same-height headline" style="height: 410px;"><!--box same-height headline-->
@@ -789,7 +1099,7 @@
                         related_products();
                     ?>
                 </div><!--row same-height-row-->
-            </div><!--col-md-9 end-->
+            </div><!--col-md-12 end-->
         </div>
     </div>
     <!--footer start-->
@@ -804,3 +1114,5 @@
 </body>
 
 </html>
+
+<?php }?>

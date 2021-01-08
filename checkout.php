@@ -37,7 +37,7 @@
                         }
                     ?>
                 </a>
-                <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?> </a>
+                <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?></a>
 
             </div><!-- col-md-6 offer Finish -->
             <!-- col-md-6 Begin -->
@@ -52,13 +52,13 @@
                     </li>
                     <li>
                         <?php 
-                            if(!isset($_SESSION['customer_username'])){
-                                echo "<a href='checkout.php'>My Account</a>";
-                            }
-                            else{
-                                echo "<a href='customer/my_account.php?my_order'>My Account</a>";
-                            }
-                        ?>
+                                if(!isset($_SESSION['customer_username'])){
+                                    echo "<a href='checkout.php'>My Account</a>";
+                                }
+                                else{
+                                    echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                                }
+                            ?>
                     </li>
                     <li>
                         <a href="cart.php">Go To Cart</a>
@@ -155,29 +155,49 @@
                     <!-- nav navbar-nav left Begin -->
                     <ul class="nav navbar-nav left">
 
+                    <?php 
 
-                        <li >
-                            <a href="index.php">Home</a>
-                        </li>
-                        <li>
-                            <a href="shop.php">Shop</a>
-                        </li>
-                        <li>
-                            <?php 
-                                if(!isset($_SESSION['customer_username'])){
-                                    echo "<a href='checkout.php'>My Account</a>";
-                                }
-                                else{
-                                    echo "<a href='customer/my_account.php?my_order'>My Account</a>";
-                                }
-                            ?>
-                        </li>
-                        <li>
-                            <a href="cart.php">Shopping Cart</a>
-                        </li>
-                        <li  class="active">
-                            <a href="contact.php">Contact Us</a>
-                        </li>
+                        if(!isset($_SESSION['customer_username'])){
+                            
+                            echo "
+                                <li class='active' >
+                                    <a href='index.php'>Home</a>
+                                </li>
+                                <li>
+                                    <a href='shop.php'>Shop</a>
+                                </li>
+                                <li>
+                                    <a href='checkout.php'>My Account</a>
+                                </li>
+                                <li>
+                                    <a href='cart.php'>Shopping Cart</a>
+                                </li>
+                                <li>
+                                    <a href='contact.php'>Contact Us</a>
+                                </li>
+                            ";
+                        }
+                        else{
+                            
+                            echo "
+                                <li>
+                                    <a href='index.php'>Home</a>
+                                </li>
+                                <li>
+                                    <a href='shop.php'>Shop</a>
+                                </li>
+                                <li class='active'>
+                                    <a href='customer/my_account.php?my_order'>My Account</a>
+                                </li>
+                                <li>
+                                    <a href='cart.php'>Shopping Cart</a>
+                                </li>
+                                <li>
+                                    <a href='contact.php'>Contact Us</a>
+                                </li>
+                            ";
+                        }
+                    ?>
 
                     </ul><!-- nav navbar-nav left Finish -->
 
@@ -245,56 +265,27 @@
             <div class="col-md-12"><!--col-md-12 breadcrumb start-->
                 <ul class="breadcrumb">
                     <li><a href="index.php">Home</a></li>
-                    <li>Contact</li>
+                    <li>CheckOut</li>
                 </ul>
             </div><!--col-md-12 breadcrumb end-->
-            <div class="row"><!--form-group row start-->
-                <div class="col-md-2"></div>
-                <div class="col-md-8 ">
-                    <div class="box" >
-                        <div class="box-header"><!--box header start-->
-                            <center>
-                                <h2>Contact Us</h2>
-                                <p>If you have any questions , Please feel free to contact us.Our customer 
-                                    services center is working for you 24/7.
-                                </p>
-                            </center>
-                        </div><!--box header end-->
-                        <form action="contact.php" method="post" enctype="multipart/form-data" style="margin-top: 30px;">
-                            <div class="form-group">
-                                <label><h4 style="margin:0;">Name:</h4></label>
-                                <input type="text" name="name" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label><h4 style="margin:0;">Email:</h4></label>
-                                <input type="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label><h4 style="margin:0;">Subject:</h4></label>
-                                <input type="text" name="subject" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label><h4 style="margin:0;">Message:</h4></label>
-                                <textarea type="text" name="message" class="form-control" style="resize: vertical;" required></textarea>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" name="submit" class="btn btn-primary">
-                                    <i class="fa fa-user-md"></i>&nbsp;Send Message
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-md-2"></div>
-            </div><!--form-group row end-->
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <?php 
+                    if(!isset($_SESSION['customer_username'])){
+                        include('customer/customer_login.php');                        
+                    }
+                    else{
+                        include('payment.php');
+                    }
+                ?>
+            </div>
+            <div class="col-md-2"></div>
         </div>
     </div>
-    <!--footer start-->
-    <div style="margin-top: 40px;">
+        <!--footer start-->
         <?php
-            include("includes/footer.php");
-        ?>
-    </div>
+        include("includes/footer.php");
+    ?>
     <!--footer end--> 
 
     <script src="js/jquery-331.min.js"></script>
@@ -304,3 +295,4 @@
 </body>
 
 </html>
+
