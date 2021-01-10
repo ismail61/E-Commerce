@@ -20,6 +20,7 @@
         $slider_id = $_GET['edit_slider'];
         $row = mysqli_fetch_array(mysqli_query($db,"SELECT * from slider where id = '$slider_id'"));
         $slider_name = $row['slider_name'];
+        $slider_url = $row['slider_url'];
         $slider_image = $row['slider_image'];
     }
 ?>
@@ -39,6 +40,10 @@
                         <input type="text" value="<?php echo $slider_name ?>" name="slider_name" class="form-control">
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Slider URL</label>
+                        <input type="url" value="<?php echo $slider_url ?>" name="slider_url" class="form-control">
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Slider Image</label>
                         <input type="file" name="slider_image" class="form-control">
                     </div>
@@ -51,6 +56,7 @@
                     if(isset($_POST['slider_edit'])){
 
                         $slider_name = $_POST['slider_name'];
+                        $slider_url = $_POST['slider_url'];
                         $slider_image = $_FILES['slider_image']['name'];
                         if($slider_image!=NULL){
 
@@ -72,7 +78,7 @@
                                 $slider_image_tmp_name = $_FILES['slider_image']['tmp_name'];
                                 move_uploaded_file($slider_image_tmp_name,"slides_images/$slider_image");
                                 $run = mysqli_query($db,"UPDATE slider SET 
-                                slider_name='$slider_name',slider_image='$slider_image' where id='$slider_id'");
+                                slider_name='$slider_name',slider_url='$slider_url',slider_image='$slider_image' where id='$slider_id'");
                                 if($run){
                                     //echo "<script>alert('This Slider has been Edited')</script>";
                                     echo "<script>window.open('index.php?view_slider','_self')</script>";
@@ -80,7 +86,7 @@
                             }
                         }
                         else{
-                            $run = mysqli_query($db,"UPDATE slider SET slider_name='$slider_name' where id='$slider_id'");
+                            $run = mysqli_query($db,"UPDATE slider SET slider_name='$slider_name',slider_url='$slider_url' where id='$slider_id'");
                             if($run){
                                 //echo "<script>alert('This Slider has been Edited')</script>";
                                 echo "<script>window.open('index.php?view_slider','_self')</script>";

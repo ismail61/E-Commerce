@@ -1,0 +1,8 @@
+{
+    "require": {
+        "mailjet/mailjet-apiv3-php": "^1.5",
+        "phpmailer/phpmailer": "^6.2",
+        "guzzlehttp/guzzle": "^7.2",
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}

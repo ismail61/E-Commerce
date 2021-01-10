@@ -32,6 +32,10 @@
                         <input type="text" name="slider_name" class="form-control" required>
                     </div>
                     <div class="form-group">
+                        <label class="control-label">Slider URL</label>
+                        <input type="url" name="slider_url" class="form-control" required>
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">Slider Image</label>
                         <input type="file" name="slider_image" class="form-control" required>
                     </div>
@@ -47,6 +51,7 @@
             if(isset($_POST['slider_insert'])){
 
                 $slider_name = $_POST['slider_name'];
+                $slider_url = $_POST['slider_url'];
                 $slider_image = $_FILES['slider_image']['name'];
                 $slider_image_size = $_FILES['slider_image']['size'];
                 $allowed = array(   "jpg" => "image/jpg",
@@ -68,8 +73,8 @@
                     if($run<4){
                         $slider_image_tmp_name = $_FILES['slider_image']['tmp_name'];
                         move_uploaded_file($slider_image_tmp_name,"slides_images/$slider_image");
-                        $run = mysqli_query($db,"INSERT INTO slider(slider_name,slider_image)
-                         Values('$slider_name','$slider_image');");
+                        $run = mysqli_query($db,"INSERT INTO slider(slider_name,slider_url,slider_image)
+                         Values('$slider_name','$slider_url','$slider_image');");
                         if($run){
                             //echo "<script>alert('New Slider has been inserted')</script>";
                             echo "<script>window.open('index.php?view_slider','_self')</script>";

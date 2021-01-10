@@ -201,6 +201,20 @@
                                 <i class="fa fa-star"></i> View Reviews
                             </a>
                         </li>
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#boxes">
+                                <i class="fa fa-box"> Boxes</i>
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                            <ul class="collapse" id="boxes">
+                                <li>
+                                    <a href="index.php?insert_boxes">Insert Boxes</a>
+                                </li>
+                                <li>
+                                    <a href="index.php?view_boxes">View & Edit Boxes</a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -279,6 +293,15 @@
                             }
                             else if(isset($_GET['user_review'])){
                                 include("user_review.php");
+                            }
+                            else if(isset($_GET['insert_boxes'])){
+                                include("insert_boxes.php");
+                            }
+                            else if(isset($_GET['view_boxes'])){
+                                include("view_boxes.php");
+                            }
+                            else if(isset($_GET['edit_boxes'])){
+                                include("edit_boxes.php");
                             }
                         ?>
                     </div>
