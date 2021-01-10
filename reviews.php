@@ -156,6 +156,14 @@
         include("includes/footer.php");
     ?>
     <!--footer end--> 
+    <?php 
+        if(isset($_SESSION['customer_username'])){
+            $res = mysqli_fetch_assoc(mysqli_query($con,"SELECT status_ from customer where customer_username='$name'"));
+            if($res['status_']==0){
+                echo "<script>window.open('logout.php','_self')</script>";
+            }
+        }
+    ?>
 
     <script src="js/jquery-331.min.js"></script>
     <script src="js/bootstrap-337.min.js"></script>

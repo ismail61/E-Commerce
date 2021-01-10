@@ -249,7 +249,9 @@
                     <li data-target="#myCarousel" data-slide-to="2"></li>
                     <li data-target="#myCarousel" data-slide-to="3"></li>
 
-                </ol><!-- carousel-indicators Finish -->
+                </ol>
+                <!-- carousel-indicators Finish -->
+
                 <!-- carousel-inner Begin -->
                 <div class="carousel-inner">
 
@@ -258,11 +260,12 @@
                         $run_slider = mysqli_query($con,$get_slider);
                         while($row = mysqli_fetch_array($run_slider)){
                             $slider_name = $row['slider_name'];
+                            $slider_url = $row['slider_url'];
                             $slider_image = $row['slider_image'];
                             echo "
-                                <div class='item active'>
+                                <div class='item active'><a href='$slider_url'>
                                     <img src='admin_area/slides_images/$slider_image' class='img-responsive'>
-                                </div>
+                                </a></div>
                             ";
                         }
                     ?>
@@ -271,11 +274,12 @@
                         $run_slider = mysqli_query($con,$get_slider);
                         while ($row = mysqli_fetch_array($run_slider)) {
                             $slider_name = $row['slider_name'];
+                            $slider_url = $row['slider_url'];
                             $slider_image = $row['slider_image'];
                             echo "
-                                <div class='item'>
+                                <div class='item'><a href='$slider_url'>
                                     <img src='admin_area/slides_images/$slider_image' class='img-responsive'>
-                                </div>
+                                </a></div>
                             ";
                         }
                     ?>
@@ -304,36 +308,29 @@
 
     </div><!-- container Finish -->
     <!--carousel container end-->
+
     <div id="advantage"><!-- advantage start-->
         <div class="container"><!--container start-->
             <div class="same-height-row"><!--same-height-row start-->
+            <?php 
+                $run = mysqli_query($con,"select * from boxes LIMIT 0,3");
+                while($row = mysqli_fetch_array ($run)){
+                $boxes_title = $row['box_title'];
+                $boxes_url = $row['box_url'];
+                $boxes_description = $row['box_description'];
+                
+            ?>
                 <div class="col-sm-4">
                     <div class="box same-height " style="height: 180px;"><!--box same-height start-->
                         <div class="icon">
                             <i class="fa fa-heart" aria-hidden="true"></i>
                         </div>
-                        <h3><a href="#">BEST PRICES</a></h3>
-                        <p>You can check on all other sites about the prices and than compare with us</p>
+                        <h3><a href="<?php echo $boxes_url ?>"><?php echo $boxes_title ?></a></h3>
+                        <p><?php echo $boxes_description ?></p>
                     </div><!--box same-height end-->
                 </div>
-                <div class="col-sm-4">
-                    <div class="box same-height" style="height: 180px;"><!--box same-height start-->
-                        <div class="icon">
-                            <i class="fa fa-heart" aria-hidden="true"></i>
-                        </div>
-                        <h3><a href="#">100% SATISFACTION GUARANTEED</a></h3>
-                        <p>Free return on everything for 15 days </p>
-                    </div><!--box same-height end-->
-                </div>
-                <div class="col-sm-4">
-                    <div class="box same-height" style="height: 180px;"><!--box same-height start-->
-                        <div class="icon">
-                            <i class="fa fa-heart" aria-hidden="true"></i>
-                        </div>
-                        <h3><a href="#">WE LOVE OUR CUSTOMERS</a></h3>
-                        <p>We are known to provide best possible services</p>
-                    </div><!--box same-height end-->
-                </div>
+                <?php } ?>
+                
             </div><!--same-height-row end-->
         </div><!--container end-->
     </div><!-- advantage end-->
@@ -341,7 +338,7 @@
         <div class="box">
             <div class="container">
                 <div class="col-md-12">
-                    <h2 class="text-center text-uppercase">Latest this week</h2>
+                    <h2 class="text-center text-uppercase" style="color:#A52003;">Latest this week</h2>
                 </div>
             </div>
         </div>
@@ -366,10 +363,21 @@
     ?>
     <!--footer end--> 
 
+    <?php 
+        if(isset($_SESSION['customer_username'])){
+            $res = mysqli_fetch_assoc(mysqli_query($con,"SELECT status_ from customer where customer_username='$name'"));
+            if($res['status_']==0){
+                echo "<script>window.open('logout.php','_self')</script>";
+            }
+        }
+    ?>
+
     <script src="js/jquery-331.min.js"></script>
     <script src="js/bootstrap-337.min.js"></script>
+   
 
 
 </body>
 
 </html>
+

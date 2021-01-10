@@ -296,6 +296,14 @@
         ?>
     </div>
     <!--footer end--> 
+    <?php 
+        if(isset($_SESSION['customer_username'])){
+            $res = mysqli_fetch_assoc(mysqli_query($con,"SELECT status_ from customer where customer_username='$name'"));
+            if($res['status_']==0){
+                echo "<script>window.open('logout.php','_self')</script>";
+            }
+        }
+    ?>
 
     <script src="js/jquery-331.min.js"></script>
     <script src="js/bootstrap-337.min.js"></script>
@@ -304,3 +312,20 @@
 </body>
 
 </html>
+
+<?php
+if(isset($_POST['submit'])){
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $subject = $_POST['subject'];
+    $message = $_POST['message'];
+    $client_ip = get_client_ip();
+    $insert_contact = "insert into contacts(ip_address,name,email,subject,message) 
+    values('$client_ip','$name','$email','$subject','$message')";
+    $run_insert_contact = mysqli_query($con,$insert_contact);
+    if($run_insert_contact){
+        echo "<script>window.open('mail.php?mail_id=$email','_self')</script>";
+    }
+}
+
+?>

@@ -1,6 +1,6 @@
 
 <?php 
-    session_start();
+    
     include("includes/db.php");
     include("functions/functions.php");
     
@@ -142,6 +142,7 @@ $(document).ready(function () {
             <div class="col-md-6 offer">
                 <a href="#" class="btn btn-success btn-sm">
                     <?php 
+                        session_start();
                         if(isset($_SESSION['customer_username'])){
                             echo "WELCOME ".$_SESSION['customer_username'];
                         }
@@ -1107,6 +1108,14 @@ $(document).ready(function () {
         include("includes/footer.php");
     ?>
     <!--footer end--> 
+    <?php 
+        if(isset($_SESSION['customer_username'])){
+            $res = mysqli_fetch_assoc(mysqli_query($con,"SELECT status_ from customer where customer_username='$name'"));
+            if($res['status_']==0){
+                echo "<script>window.open('logout.php','_self')</script>";
+            }
+        }
+    ?>
     <script src="js/jquery-331.min.js"></script>
     <script src="js/bootstrap-337.min.js"></script>
 
