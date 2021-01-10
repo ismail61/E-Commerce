@@ -40,11 +40,13 @@
             echo "<script>alert('New and Old password does not match')</script>";
         }
         else{
-            $insert_password = "UPDATE customer SET customer_password = '$customer_new_password' 
+            $val = 0;
+            $insert_password = "UPDATE customer SET customer_password = '$customer_new_password',status_= '$val'
             where customer_username = '$customer_username' AND customer_password='$customer_password'";
             $run_password = mysqli_query($db,$insert_password);
             if($run_password){
-                echo "<script>alert('Password Changed')</script>";
+
+                //echo "<script>alert('Password Changed')</script>";
                 echo "<script>window.open('../logout.php','_self')</script>";
             }
         }

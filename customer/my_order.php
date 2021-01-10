@@ -42,6 +42,9 @@
                         if($order_status == 'pending'){
                             $order_status = "Unpaid";
                         }
+                        if($order_status == 'COD'){
+                            $order_status = "COD";
+                        }
                         else{
                             $order_status = "Paid";
                         }

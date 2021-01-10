@@ -31,6 +31,7 @@
         $check_user = "select * from customer where customer_username='$customer_username'
          AND customer_password= '$customer_password'";
         $run_check_user = mysqli_query($db,$check_user);
+        
         $valid_user_check = mysqli_num_rows($run_check_user);
 
         if($valid_user_check==0){
@@ -42,8 +43,11 @@
             $check_cart = "select * from cart where ip_address='$client_ip'";
             $run_check_cart = mysqli_query($db,$check_cart);
             $row_cart = mysqli_num_rows($run_check_cart);
+            $status = 1;
+            $update_status = mysqli_query($db,"UPDATE customer SET status_='$status'");
             if($row_cart>0){
                 $_SESSION['customer_username'] = $customer_username;
+                //$_SESSION['c_id'] = $id;
                 //echo "<script>alert('You are Logged in')</script>";
                 echo "<script>window.open('checkout.php','_self')</script>";
             }
