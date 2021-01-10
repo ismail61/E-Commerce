@@ -354,8 +354,11 @@
     <!--footer end--> 
     <?php 
         if(isset($_SESSION['customer_username'])){
+            $name = $_SESSION['customer_username'];
+            $value = 0;
             $res = mysqli_fetch_assoc(mysqli_query($con,"SELECT status_ from customer where customer_username='$name'"));
-            if($res['status_']==0){
+            $status = $res['status_'];
+            if($status==$value){
                 echo "<script>window.open('logout.php','_self')</script>";
             }
         }

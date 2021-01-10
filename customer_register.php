@@ -2,6 +2,7 @@
     session_start();
     include("includes/db.php");
     include("functions/functions.php");
+    $msg = "";
 ?>
 
 
@@ -299,7 +300,17 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-2"><h4 style="margin:0;">Division :</h4></label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="c_division" class="form-control" required>
+                                <select name="c_division" class="form-control" required>
+                                    <option value="Dhaka" selected>Dhaka</option>
+                                    <option value="Sylhet">Sylhet</option>
+                                    <option value="Barisal">Barisal</option>
+                                    <option value="Chittagong">Chittagong</option>
+                                    <option value="Khulna">Khulna</option>
+                                    <option value="Mymensingh">Mymensingh</option>
+                                    <option value="Rajshahi">Rajshahi</option>
+                                    <option value="Rangpur">Rangpur</option>
+                                </select>
+                                <!--<input type="text" name="c_division" class="form-control" required>-->
                                 </div>   
                             </div>
                             <div class="form-group">
@@ -349,8 +360,11 @@
     <!--footer end--> 
     <?php 
         if(isset($_SESSION['customer_username'])){
+            $name = $_SESSION['customer_username'];
+            $value = 0;
             $res = mysqli_fetch_assoc(mysqli_query($con,"SELECT status_ from customer where customer_username='$name'"));
-            if($res['status_']==0){
+            $status = $res['status_'];
+            if($status==$value){
                 echo "<script>window.open('logout.php','_self')</script>";
             }
         }

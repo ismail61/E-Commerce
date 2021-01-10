@@ -342,6 +342,11 @@ $(document).ready(function () {
                 </div><!--col-md-9 end-->
             </form>
             <?php update_cart(); ?>
+            <?php 
+                if(isset($_SESSION['customer_username'])){
+                    $customer_username = $_SESSION['customer_username'];
+                }
+            ?>
             <br><br>
             <div class="col-md-3">
                 <div class="box" id="order-summary">
@@ -387,13 +392,15 @@ $(document).ready(function () {
     <!--footer end--> 
     <?php 
         if(isset($_SESSION['customer_username'])){
+            $name = $_SESSION['customer_username'];
+            $value = 0;
             $res = mysqli_fetch_assoc(mysqli_query($con,"SELECT status_ from customer where customer_username='$name'"));
-            if($res['status_']==0){
+            $status = $res['status_'];
+            if($status==$value){
                 echo "<script>window.open('logout.php','_self')</script>";
             }
         }
     ?>
-
     <script src="js/jquery-331.min.js"></script>
     <script src="js/bootstrap-337.min.js"></script>
 
