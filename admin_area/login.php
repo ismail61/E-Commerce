@@ -54,13 +54,13 @@
                     $mail->isSMTP();                                            
                     $mail->Host       = 'smtp.gmail.com';                    
                     $mail->SMTPAuth   = true;                                   
-                    $mail->Username   = 'mobile3free@gmail.com';                     
-                    $mail->Password   = 'ismail61';                               
+                    $mail->Username   = 'your email';                     
+                    $mail->Password   = 'password';                               
                     $mail->SMTPSecure = 'tls';         
                     $mail->Port       = 587;                                    
-                    $mail->setFrom('mobile3free@gmail.com', 'mobile-shop.com');
+                    $mail->setFrom('your email', 'mobile-shop.com');
                     $mail->addAddress($admin_email);
-                    $mail->addReplyTo('mobile3free@gmail.com', 'Reply');
+                    $mail->addReplyTo('your email', 'Reply');
                     $mail->isHTML(true);                                 
                     $mail->Subject = 'OTP Verification';
                     $mail->Body    = $msg;
@@ -73,8 +73,6 @@
                 }
             }
             
-            //$_SESSION['admin_email'] = $admin_email;
-            //echo "<script>window.open('index.php?dashboard','_self')</script>";
         }
         else{
             echo "<script>alert('Email/Password Wrong')</script>";
