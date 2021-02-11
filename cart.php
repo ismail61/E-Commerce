@@ -1,7 +1,11 @@
-<?php 
-    session_start();
-    include("includes/db.php");
-    include("functions/functions.php");
+<?php
+session_start();
+include("includes/db.php");
+include("functions/functions.php");
+include("visitor_counter.php");
+include("logout_redirect.php");
+$_SESSION['time_active'] = time();
+$checkbox = false;
 ?>
 
 
@@ -12,7 +16,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Online Store</title>
+    <title>Cart</title>
     <link rel="stylesheet" href="styles/bootstrap-337.min.css">
     <link rel="stylesheet" href="font-awsome/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles/style.css">
@@ -20,20 +24,20 @@
 </head>
 
 <body>
-<script type="text/javascript">
-$(document).ready(function () {
-    $('#checkBtn').click(function() {
-      checked = $("input[type=checkbox]:checked").length;
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#checkBtn').click(function() {
+                checked = $("input[type=checkbox]:checked").length;
 
-      if(!checked) {
-        //alert("You must check at least one checkbox.");
-        return false;
-      }
+                if (!checked) {
+                    //alert("You must check at least one checkbox.");
 
-    });
-});
+                    return false;
+                }
 
-</script>
+            });
+        });
+    </script>
     <!-- Top Begin -->
     <div id="top">
 
@@ -42,14 +46,13 @@ $(document).ready(function () {
 
             <!-- col-md-6 offer Begin -->
             <div class="col-md-6 offer">
-                <a href="#" class="btn btn-success btn-sm">
-                    <?php 
-                        if(isset($_SESSION['customer_username'])){
-                            echo "WELCOME ".$_SESSION['customer_username'];
-                        }
-                        else{
-                            echo "WELCOME GUEST";
-                        }
+                <a href="javascript:void(0);" class="btn btn-success btn-sm">
+                    <?php
+                    if (isset($_SESSION['customer_username'])) {
+                        echo "WELCOME " . $_SESSION['customer_username'];
+                    } else {
+                        echo "WELCOME GUEST";
+                    }
                     ?>
                 </a>
                 <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?> </a>
@@ -66,26 +69,24 @@ $(document).ready(function () {
                         <a href="customer_register.php">Register</a>
                     </li>
                     <li>
-                        <?php 
-                            if(!isset($_SESSION['customer_username'])){
-                                echo "<a href='checkout.php'>My Account</a>";
-                            }
-                            else{
-                                echo "<a href='customer/my_account.php?my_order'>My Account</a>";
-                            }
+                        <?php
+                        if (!isset($_SESSION['customer_username'])) {
+                            echo "<a href='checkout.php'>My Account</a>";
+                        } else {
+                            echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                        }
                         ?>
                     </li>
                     <li>
                         <a href="cart.php">Go To Cart</a>
                     </li>
                     <li>
-                        <?php 
-                            if(!isset($_SESSION['customer_username'])){
-                                echo " <a href='checkout.php'>Login</a> ";
-                            }
-                            else{
-                                echo " <a href='logout.php'>LogOut</a> ";
-                            }
+                        <?php
+                        if (!isset($_SESSION['customer_username'])) {
+                            echo " <a href='checkout.php'>Login</a> ";
+                        } else {
+                            echo " <a href='logout.php'>LogOut</a> ";
+                        }
                         ?>
                     </li>
 
@@ -171,23 +172,22 @@ $(document).ready(function () {
                     <ul class="nav navbar-nav left">
 
 
-                        <li >
+                        <li>
                             <a href="index.php">Home</a>
                         </li>
                         <li>
                             <a href="shop.php">Shop</a>
                         </li>
                         <li>
-                            <?php 
-                                if(!isset($_SESSION['customer_username'])){
-                                    echo "<a href='checkout.php'>My Account</a>";
-                                }
-                                else{
-                                    echo "<a href='customer/my_account.php?my_order'>My Account</a>";
-                                }
+                            <?php
+                            if (!isset($_SESSION['customer_username'])) {
+                                echo "<a href='checkout.php'>My Account</a>";
+                            } else {
+                                echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                            }
                             ?>
                         </li>
-                        <li  class="active">
+                        <li class="active">
                             <a href="cart.php">Shopping Cart</a>
                         </li>
                         <li>
@@ -257,95 +257,162 @@ $(document).ready(function () {
     </div><!-- navbar navbar-default Finish -->
     <div id="content">
         <div class="container">
-            <div class="col-md-12"><!--col-md-12 breadcrumb start-->
+            <div class="col-md-12">
+                <!--col-md-12 breadcrumb start-->
                 <ul class="breadcrumb">
                     <li><a href="index.php">Home</a></li>
                     <li>Cart</li>
                 </ul>
-            </div><!--col-md-12 breadcrumb end-->
-            <form action="" enctype="multipart/form-data" method="POST">
-                <div class="col-md-9" id="cart"><!--col-md-9 start-->
-                    <div class="box">
-                        <h1 class="text-center">Shopping Cart</h1>
-                        <p class="text-center">Currently you have <?php count_item(); ?> item(s) in your cart</p>
-                        <hr>
-                        <table class="table table-responsive table-bordered" ><!--table responsive start-->
-                            <thead>
+            </div>
+            <!--col-md-12 breadcrumb end-->
+            <!--<form action="" enctype="multipart/form-data" method="POST">-->
+            <div class="col-md-9" id="cart">
+                <!--col-md-9 start-->
+                <div class="box">
+                    <h1 class="text-center">Shopping Cart</h1>
+                    <p class="text-center">Currently you have <?php count_item(); ?> item(s) in your cart</p>
+                    <p style="color: red; text-align: center;">If you increase or decrease your product(s) quantity.Please fill up the Quantity field And click <button class="btn btn-warning text-center"><i class="fa fa-refresh"></i> Update</button> button</p>
+                    <hr>
+                    <table class="table table-responsive table-bordered">
+                        <!--table responsive start-->
+                        <thead>
+                            <tr>
+                                <th colspan="2">Product</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Color</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                                
+                                <th>Sub Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $ip_address = get_client_ip();
+                            $select_cart = "select * from cart where ip_address = '$ip_address'";
+                            $run_cart = mysqli_query($db, $select_cart);
+                            while ($row_cart = mysqli_fetch_array($run_cart)) {
+                                $total = 0;
+                                $p_id = $row_cart['p_id'];
+                                $id = $row_cart['id'];
+                                $product_quantity = $row_cart['product_quantity'];
+                                $product_color = $row_cart['product_color'];
+                                $get_product = "select * from products where p_id ='$p_id'";
+                                $run_product = mysqli_query($db, $get_product);
+                                $row_product = mysqli_fetch_array($run_product);
+                                $p_img = $row_product['p_img1'];
+                                $p_title = $row_product['p_title'];
+                                $p_price = $row_product['p_price'];
+                                $sub_total = $p_price * $product_quantity;
+                                $total += $sub_total;
+
+                            ?>
                                 <tr>
-                                    <th colspan="2">Product</th>
-                                    <th>Quantity</th>
-                                    <th>Unit Price</th>
-                                    <th>Color</th>
-                                    <th>Delete</th>
-                                    <th>Sub Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                    $ip_address = get_client_ip();
-                                    $select_cart = "select * from cart where ip_address = '$ip_address'";
-                                    $run_cart = mysqli_query($db,$select_cart);
-                                    while($row_cart = mysqli_fetch_array($run_cart)){
-                                        $total = 0;
-                                        $p_id = $row_cart['p_id'];
-                                        $product_quantity = $row_cart['product_quantity'];
-                                        $product_color = $row_cart['product_color'];
-                                        $get_product = "select * from products where p_id ='$p_id'";
-                                        $run_product = mysqli_query($db,$get_product);
-                                        $row_product = mysqli_fetch_array($run_product);
-                                        $p_img = $row_product['p_img1'];
-                                        $p_title = $row_product['p_title'];
-                                        $p_price = $row_product['p_price'];
-                                        $sub_total = $p_price * $product_quantity;
-                                        $total += $sub_total;
-                                    
-                                ?>
-                                <tr>
-                                    <td><a href="details.php?p_id=<?php echo $p_id ?>"><img src="admin_area/product_images/upload_image/<?php echo $p_img ?>" 
-                                                     class="img-responsive"style="width: 50px;"></a></td>
+                                    <td><a href="details.php?p_id=<?php echo $p_id ?>"><img src="admin_area/product_images/upload_image/<?php echo $p_img ?>" class="img-responsive" style="width: 50px;"></a></td>
                                     <td><a href="details.php?p_id=<?php echo $p_id ?>"><?php echo $p_title ?></a></td>
-                                    <td><?php echo $product_quantity ?></td>
-                                    <td><?php echo $p_price ?></td>
-                                    <td><?php echo $product_color ?></td>
-                                    <td><input type="checkbox" name="remove[]" value="<?php echo $p_id ?>"> </td>
+                                    <form method="post" enctype="multipart/form-data">
+                                        <td><input style="width: 60px; text-align: center;" type="number" name="qty" value="<?php echo $product_quantity; ?>"></td>
+
+                                        <td><?php echo $p_price ?></td>
+
+                                        <td><?php echo $product_color ?></td>
+                                    
+                                        <center>
+                                            <th><button type="submit" class="btn btn-warning text-center" style="margin-top: 10px;" value="<?php echo $id ?>" name="update_cart"><i class="fa fa-refresh"></i> Update</button></th>
+                                        </center>
+                                    </form>
+                                    <form method="post">
+                                        <center>
+                                            <th><button type="submit" class="btn btn-danger text-center" style="margin-top: 10px;" value="<?php echo $id ?>" name="del_cart"><i class="fa fa-trash-o"></i> Delete</button></th>
+                                        </center>
+                                    </form>
+                                    
+                                    <!--<td><input type="checkbox" name="remove[]" value="<?php echo $p_id ?>"> </td>-->
                                     <td><?php echo $total ?></td>
                                 </tr>
-                                <?php 
-                                    }
-                                ?>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="6">TOTAL AMOUNT :</th>
-                                    <th >Tk <?php total_price(); ?></th>
-                                </tr>
-                            </tfoot>
-                        </table><!--table responsive end-->
+
+                                
+                                
+                            <?php
+                            }
+                            ?>
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="7">TOTAL AMOUNT :</th>
+                                <th>Tk <?php total_price(); ?></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <!--table responsive end-->
+                </div>
+                <?php
+                if (isset($_POST['del_cart'])) {
+                    $idd = $_POST['del_cart'];
+                    $select_  = "DELETE from cart where id = '$idd'";
+                    $run_cus = mysqli_query($db, $select_);
+                    if ($run_cus) {
+                        //echo "<script>alert('One Categories has been deleted')</script>";
+                        echo "<script>window.open('cart.php','_self')</script>";
+                    }
+                }
+                if (isset($_POST['update_cart'])) {
+                    $idd = $_POST['update_cart'];
+                    $qty = $_POST['qty'];
+                    $update = mysqli_query($db,"UPDATE cart Set product_quantity='$qty' where id='$idd'");
+                    if($update){
+                    echo "<script>window.open('cart.php','_self')</script>";}
+                }
+                ?>
+
+                <div class="box-footer col-md-12">
+                    <!--box-footer col-md-12 start-->
+                    <div class="pull-left">
+                        <a href="shop.php" class="btn btn-default">
+                            <i class="fa fa-chevron-left"></i>&nbsp;Continue Shopping
+                        </a>
                     </div>
-                    
-                    <div class="box-footer col-md-12"><!--box-footer col-md-12 start-->
-                        <div class="pull-left">
-                            <a href="shop.php" class="btn btn-default">
-                                <i class="fa fa-chevron-left"></i>&nbsp;Continue Shopping
+                    <div class="pull-right">
+                        <!-- <button class="btn btn-default" type="submit" name="update" value="Update Cart" id="checkBtn">
+                            <i class="fa fa-refresh"></i>&nbsp;Update Cart
+                        </button> -->
+                        <?php if (count_item_int() == 0) { ?>
+                            <a class="btn btn-primary">
+                                Proceed to checkout&nbsp;<i class="fa fa-chevron-right"></i>
                             </a>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-default" type="submit" name="update" value="Update Cart" id="checkBtn">
-                                <i class="fa fa-refresh"></i>&nbsp;Update Cart
-                            </button>
+
+                        <?php
+                        } else { ?>
                             <a href="checkout.php" class="btn btn-primary">
                                 Proceed to checkout&nbsp;<i class="fa fa-chevron-right"></i>
                             </a>
-                        </div>
-                    </div><!--box-footer col-md-12-->
-                    <hr><br>
-                </div><!--col-md-9 end-->
-            </form>
-            <?php update_cart(); ?>
-            <?php 
-                if(isset($_SESSION['customer_username'])){
-                    $customer_username = $_SESSION['customer_username'];
-                }
+                        <?php } ?>
+
+                    </div>
+                </div>
+                <!--box-footer col-md-12-->
+                <hr><br>
+            </div>
+            <!--col-md-9 end-->
+            <!--</form>-->
+            <?php if ($checkbox) {
+                update_cart_by_quantity();
+            } else {
+                update_cart();
+            } ?>
+            <?php
+            //session_start();
+            if (isset($_SESSION['customer_username'])) {
+                $customer_username = $_SESSION['customer_username'];
+                $get_customer = "select * from customer where customer_username = '$customer_username';";
+                $run_customer = mysqli_query($db, $get_customer);
+                $row = mysqli_fetch_array($run_customer);
+                $customer_division = $row['customer_division'];
+                $c_div = $customer_division;
+                $dhaka = "Dhaka";
+            }
             ?>
             <br><br>
             <div class="col-md-3">
@@ -354,52 +421,74 @@ $(document).ready(function () {
                         <h3 class="text-center">Order Summary</h3>
                     </div>
                     <p class="text-muted">
-                        Shipping and additional costs are calculated based on the values you have entered
+                        Shipping and Additional costs are calculated based on the values that you have entered
                     </p>
                     <div class="table-responsive">
                         <table class="table">
                             <tbody>
                                 <tr>
                                     <td>Order Sub Total</td>
-                                    <th>Tk <?php total_price();?></th>
+                                    <th>Tk <?php total_price(); ?></th>
                                 </tr>
                                 <tr>
                                     <td>Shipping and Handling</td>
-                                    <td>Tk 0</td>
+                                    <th>Tk
+                                        <?php
+                                        if (isset($_SESSION['customer_username'])) {
+                                            if ($c_div == $dhaka) {
+                                                echo "60";
+                                            } else {
+                                                echo "80";
+                                            }
+                                        } else {
+                                            echo "60";
+                                        }
+                                        ?>
+                                    </th>
                                 </tr>
-                                <tr>
-                                    <td>Tax</td>
-                                    <td>Tk 0</td>
-                                </tr>
+
                                 <tr class="size">
                                     <th class="text-left">Total</th>
-                                    <th>Tk <?php echo total_price(); ?> </th>
+                                    <th>Tk
+                                        <?php
+                                        if (isset($_SESSION['customer_username'])) {
+                                            if ($c_div == $dhaka) {
+                                                echo count_total_price() + 60;
+                                            } else {
+                                                echo count_total_price() + 80;
+                                            }
+                                        } else {
+                                            echo count_total_price() + 60;
+                                        }
+
+                                        ?>
+                                    </th>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
     <!--footer start-->
     <div style="margin-top: 40px;">
         <?php
-            include("includes/footer.php");
+        include("includes/footer.php");
         ?>
     </div>
-    <!--footer end--> 
-    <?php 
-        if(isset($_SESSION['customer_username'])){
-            $name = $_SESSION['customer_username'];
-            $value = 0;
-            $res = mysqli_fetch_assoc(mysqli_query($con,"SELECT status_ from customer where customer_username='$name'"));
-            $status = $res['status_'];
-            if($status==$value){
-                echo "<script>window.open('logout.php','_self')</script>";
-            }
+    <!--footer end-->
+    <?php
+    if (isset($_SESSION['customer_username'])) {
+        $name = $_SESSION['customer_username'];
+        $value = 0;
+        $res = mysqli_fetch_assoc(mysqli_query($con, "SELECT status_ from customer where customer_username='$name'"));
+        $status = $res['status_'];
+        if ($status == $value) {
+            echo "<script>window.open('logout.php','_self')</script>";
         }
+    }
     ?>
     <script src="js/jquery-331.min.js"></script>
     <script src="js/bootstrap-337.min.js"></script>

@@ -2,6 +2,8 @@
     session_start();
     include("includes/db.php");
     include("functions/functions.php");
+    include("visitor_counter.php");
+    
 ?>
 
 <?php 
@@ -16,7 +18,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Online Store</title>
+    <title>Reviews</title>
     <link rel="stylesheet" href="styles/bootstrap-337.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
@@ -33,7 +35,7 @@
 
             <!-- col-md-6 offer Begin -->
             <div class="col-md-6 offer">
-                <a href="#" class="btn btn-success btn-sm">
+                <a href="javascript:void(0);" class="btn btn-success btn-sm">
                     <?php 
                         if(isset($_SESSION['customer_username'])){
                             echo "WELCOME ".$_SESSION['customer_username'];

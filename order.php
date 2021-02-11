@@ -21,7 +21,27 @@
         $get_product = "select * from products where p_id = '$p_id'";
         $run_get_product = mysqli_query($db,$get_product);
         while($row_product = mysqli_fetch_array($run_get_product)){
-            $sub_total = $row_product['p_price'] * $product_quantity;
+            if(isset($_SESSION['customer_username'])){
+                $customer_username = $_SESSION['customer_username'];
+                $get_customer = "select * from customer where customer_username = '$customer_username';";
+                $run_customer = mysqli_query($db,$get_customer);
+                $row = mysqli_fetch_array($run_customer);
+                $customer_division = $row['customer_division'];
+                $c_div = $customer_division;
+                $dhaka = "Dhaka";
+            }
+            $sub_total = 0;
+            if($c_div==$dhaka){
+                $sub_total = ($row_product['p_price'] * $product_quantity)+60;
+                
+                
+            }
+            else{
+                $sub_total = ($row_product['p_price'] * $product_quantity)+80;
+                
+                
+            }
+            
             $insert_customer_order = "INSERT INTO customer_order(customer_id,due_amount,invoice_number,
                                         product_quantity,product_color,order_date,order_status,p_id) 
                                         values('$c_id','$sub_total','$invoice_number','$product_quantity','$product_color',

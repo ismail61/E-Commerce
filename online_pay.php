@@ -22,7 +22,7 @@ if(session_start() && (isset($_GET['price']))){
     $post_data['total_amount'] = $tk;
     $post_data['currency'] = "BDT";
     $post_data['tran_id'] = "SSLCZ_TEST_".uniqid();
-    $post_data['success_url'] = "http://localhost/Ecom/success.php?price=$tk";
+    $post_data['success_url'] = "http://localhost/Ecom/success.php?price=$tk&cd=$customer_id";
     $post_data['fail_url'] = "http://localhost/Ecom/fail.php";
     $post_data['cancel_url'] = "http://localhost/Ecom/cancel.php";
     # $post_data['multi_card_name'] = "mastercard,visacard,amexcard";  # DISABLE TO DISPLAY ALL AVAILABLE
@@ -113,6 +113,7 @@ if(session_start() && (isset($_GET['price']))){
     }
 }
 else{
+    echo "hi";
     echo "<script>window.open('checkout.php')</script>";
 }
 

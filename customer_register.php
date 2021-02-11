@@ -2,7 +2,10 @@
     session_start();
     include("includes/db.php");
     include("functions/functions.php");
+    include("visitor_counter.php");
     $msg = "";
+    include("logout_redirect.php");
+    $_SESSION['time_active'] = time();
 ?>
 
 
@@ -30,7 +33,7 @@
             <div class="col-md-6 offer">
 
 
-                <a href="#" class="btn btn-success btn-sm">
+                <a href="javascript:void(0);" class="btn btn-success btn-sm">
                     <?php 
                         if(isset($_SESSION['customer_username'])){
                             echo "WELCOME ".$_SESSION['customer_username'];

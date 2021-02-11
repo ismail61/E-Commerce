@@ -2,6 +2,9 @@
     session_start();
     include("includes/db.php");
     include("functions/functions.php");
+    include("visitor_counter.php");
+    include("logout_redirect.php");
+    $_SESSION['time_active'] = time();
 ?>
 
 
@@ -12,7 +15,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Online Store</title>
+    <title>CheckOut</title>
     <link rel="stylesheet" href="styles/bootstrap-337.min.css">
     <link rel="stylesheet" href="font-awsome/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles/style.css">
@@ -27,7 +30,7 @@
 
             <!-- col-md-6 offer Begin -->
             <div class="col-md-6 offer">
-                <a href="#" class="btn btn-success btn-sm">
+                <a href="javascript:void(0);" class="btn btn-success btn-sm">
                     <?php 
                         if(isset($_SESSION['customer_username'])){
                             echo "WELCOME ".$_SESSION['customer_username'];

@@ -1,0 +1,46 @@
+.jumbotron {
+    margin-top: 10px;
+}
+
+.jumbotron .delivery {
+    color: blue;
+    margin-bottom: 10px;
+}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid;
+}
+
+.card .shopname {
+    text-align: center;
+    color: red;
+}
+
+td {
+    height: 35px;
+}
+
+table,
+th,
+td {
+    border: 1px solid green;
+}
+
+table {
+    width: 30%;
+    color: black;
+    text-align: center;
+}
+
+.row .col-md-3 {
+    margin: 10px;
+    text-align: right;
+}
+
+.row .col-md-9 {
+    text-align: right;
+}

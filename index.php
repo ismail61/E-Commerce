@@ -1,7 +1,11 @@
-<?php 
-    session_start();
-    include("includes/db.php");
-    include("functions/functions.php");
+<?php
+session_start();
+
+include("includes/db.php");
+include("visitor_counter.php");
+include("functions/functions.php");
+include("logout_redirect.php");
+$_SESSION['time_active'] = time();
 ?>
 
 
@@ -12,60 +16,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mobile Store</title>
+    <title>Scroll Through</title>
     <link rel="stylesheet" href="styles/bootstrap-337.min.css">
     <link rel="stylesheet" href="font-awsome/css/font-awesome.min.css">
     <link rel="stylesheet" href="styles/style.css">
+
+
 </head>
+
 <body>
     <!-- Top Begin -->
-    <div id="top"  style="position: fixed; width:100%; z-index:5; top:0; ">
+    <div id="top">
 
         <!-- container Begin -->
         <div class="container">
+
             <!-- col-md-6 offer Begin -->
             <div class="col-md-6 offer">
-                
-                <a href="#" class="btn btn-success btn-sm">
-                    <?php 
-                        if(isset($_SESSION['customer_username'])){
-                            echo "WELCOME ".$_SESSION['customer_username'];
-                        }
-                        else{
-                            echo "WELCOME GUEST";
-                        }
+                <a href="javascript:void(0);" class="btn btn-success btn-sm">
+                    <?php
+                    if (isset($_SESSION['customer_username'])) {
+                        echo "WELCOME " . $_SESSION['customer_username'];
+                    } else {
+                        echo "WELCOME GUEST";
+                    }
                     ?>
                 </a>
-                <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?> </a>
+                <a href="checkout.php"><?php count_item(); ?> Item(s) In Your Cart | Total Price : Tk <?php total_price(); ?></a>
+
             </div><!-- col-md-6 offer Finish -->
             <!-- col-md-6 Begin -->
             <div class="col-md-6">
+
                 <!-- menu Begin -->
                 <ul class="menu">
+
+
                     <li>
                         <a href="customer_register.php">Register</a>
                     </li>
                     <li>
-                        <?php 
-                            if(!isset($_SESSION['customer_username'])){
-                                echo "<a href='checkout.php'>My Account</a>";
-                            }
-                            else{
-                                echo "<a href='customer/my_account.php?my_order'>My Account</a>";
-                            }
+                        <?php
+                        if (!isset($_SESSION['customer_username'])) {
+                            echo "<a href='checkout.php'>My Account</a>";
+                        } else {
+                            echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                        }
                         ?>
                     </li>
                     <li>
                         <a href="cart.php">Go To Cart</a>
                     </li>
                     <li>
-                        <?php 
-                            if(!isset($_SESSION['customer_username'])){
-                                echo " <a href='checkout.php'>Login</a> ";
-                            }
-                            else{
-                                echo " <a href='logout.php'>LogOut</a> ";
-                            }
+                        <?php
+                        if (!isset($_SESSION['customer_username'])) {
+                            echo " <a href='checkout.php'>Login</a> ";
+                        } else {
+                            echo " <a href='logout.php'>LogOut</a> ";
+                        }
                         ?>
                     </li>
 
@@ -77,20 +85,20 @@
 
     </div><!-- Top Finish -->
     <!-- navbar navbar-default Begin -->
-    <div id="navbar" class="navbar navbar-default ">
+    <div id="navbar" class="navbar navbar-default">
 
         <!-- container Begin -->
-        <div class="container" style="margin-top: 80px;" >
+        <div class="container">
             <!-- navbar-header Begin -->
 
             <div class="navbar-header">
 
                 <!-- navbar-brand home Begin -->
 
-                <a href="index.php" class="navbar-brand home" style="padding: 4px 15px;">
+                <a href="index.php" class="navbar-brand home">
 
-                    <img src="images/ecom-store-logo.png" alt="M-dev-Store Logo" class="hidden-xs">
-                    <img src="images/ecom-store-logo-mobile.png" alt="M-dev-Store Logo Mobile" class="visible-xs">
+                    <img src="images/ecom-store-logo.png" alt="Logo" class="hidden-xs">
+                    <img src="images/ecom-store-logo-mobile.png" alt="Logo Mobile" class="visible-xs">
 
                 </a><!-- navbar-brand home Finish -->
 
@@ -145,7 +153,7 @@
             <div class="navbar-collapse collapse" id="navigation">
                 <!-- padding-nav Begin -->
 
-                <div class="padding-nav" style="padding-top: 0px;">
+                <div class="padding-nav">
 
                     <!-- nav navbar-nav left Begin -->
                     <ul class="nav navbar-nav left">
@@ -158,13 +166,12 @@
                             <a href="shop.php">Shop</a>
                         </li>
                         <li>
-                            <?php 
-                                if(!isset($_SESSION['customer_username'])){
-                                    echo "<a href='checkout.php'>My Account</a>";
-                                }
-                                else{
-                                    echo "<a href='customer/my_account.php?my_order'>My Account</a>";
-                                }
+                            <?php
+                            if (!isset($_SESSION['customer_username'])) {
+                                echo "<a href='checkout.php'>My Account</a>";
+                            } else {
+                                echo "<a href='customer/my_account.php?my_order'>My Account</a>";
+                            }
                             ?>
                         </li>
                         <li>
@@ -183,7 +190,7 @@
 
                     <i class="fa fa-shopping-cart"></i>
 
-                    <span><?php count_item(); ?> Items(s) In Your Cart</span>
+                    <span><?php count_item(); ?> Item(s) In Your Cart</span>
 
                 </a><!-- btn navbar-btn btn-primary Finish -->
                 <!-- navbar-collapse collapse right Begin -->
@@ -255,33 +262,33 @@
                 <!-- carousel-inner Begin -->
                 <div class="carousel-inner">
 
-                    <?php 
-                        $get_slider = "select * from slider LIMIT 0,1";
-                        $run_slider = mysqli_query($con,$get_slider);
-                        while($row = mysqli_fetch_array($run_slider)){
-                            $slider_name = $row['slider_name'];
-                            $slider_url = $row['slider_url'];
-                            $slider_image = $row['slider_image'];
-                            echo "
+                    <?php
+                    $get_slider = "select * from slider LIMIT 0,1";
+                    $run_slider = mysqli_query($con, $get_slider);
+                    while ($row = mysqli_fetch_array($run_slider)) {
+                        $slider_name = $row['slider_name'];
+                        $slider_url = $row['slider_url'];
+                        $slider_image = $row['slider_image'];
+                        echo "
                                 <div class='item active'><a href='$slider_url'>
                                     <img src='admin_area/slides_images/$slider_image' class='img-responsive'>
                                 </a></div>
                             ";
-                        }
+                    }
                     ?>
-                    <?php 
-                        $get_slider = "select * from slider LIMIT 1,3";
-                        $run_slider = mysqli_query($con,$get_slider);
-                        while ($row = mysqli_fetch_array($run_slider)) {
-                            $slider_name = $row['slider_name'];
-                            $slider_url = $row['slider_url'];
-                            $slider_image = $row['slider_image'];
-                            echo "
+                    <?php
+                    $get_slider = "select * from slider LIMIT 1,3";
+                    $run_slider = mysqli_query($con, $get_slider);
+                    while ($row = mysqli_fetch_array($run_slider)) {
+                        $slider_name = $row['slider_name'];
+                        $slider_url = $row['slider_url'];
+                        $slider_image = $row['slider_image'];
+                        echo "
                                 <div class='item'><a href='$slider_url'>
                                     <img src='admin_area/slides_images/$slider_image' class='img-responsive'>
                                 </a></div>
                             ";
-                        }
+                    }
                     ?>
 
                 </div><!-- carousel-inner Finish -->
@@ -309,32 +316,40 @@
     </div><!-- container Finish -->
     <!--carousel container end-->
 
-    <div id="advantage"><!-- advantage start-->
-        <div class="container"><!--container start-->
-            <div class="same-height-row"><!--same-height-row start-->
-            <?php 
-                $run = mysqli_query($con,"select * from boxes LIMIT 0,3");
-                while($row = mysqli_fetch_array ($run)){
-                $boxes_title = $row['box_title'];
-                $boxes_url = $row['box_url'];
-                $boxes_description = $row['box_description'];
-                
-            ?>
-                <div class="col-sm-4">
-                    <div class="box same-height " style="height: 180px;"><!--box same-height start-->
-                        <div class="icon">
-                            <i class="fa fa-heart" aria-hidden="true"></i>
+    <div id="advantage">
+        <!-- advantage start-->
+        <div class="container">
+            <!--container start-->
+            <div class="same-height-row">
+                <!--same-height-row start-->
+                <?php
+                $run = mysqli_query($con, "select * from boxes LIMIT 0,3");
+                while ($row = mysqli_fetch_array($run)) {
+                    $boxes_title = $row['box_title'];
+                    $boxes_url = $row['box_url'];
+                    $boxes_description = $row['box_description'];
+
+                ?>
+                    <div class="col-sm-4">
+                        <div class="box same-height " style="height: 180px;">
+                            <!--box same-height start-->
+                            <div class="icon">
+                                <i class="fa fa-heart" aria-hidden="true"></i>
+                            </div>
+                            <h3><a href="<?php echo $boxes_url ?>"><?php echo $boxes_title ?></a></h3>
+                            <p><?php echo $boxes_description ?></p>
                         </div>
-                        <h3><a href="<?php echo $boxes_url ?>"><?php echo $boxes_title ?></a></h3>
-                        <p><?php echo $boxes_description ?></p>
-                    </div><!--box same-height end-->
-                </div>
+                        <!--box same-height end-->
+                    </div>
                 <?php } ?>
-                
-            </div><!--same-height-row end-->
-        </div><!--container end-->
+
+            </div>
+            <!--same-height-row end-->
+        </div>
+        <!--container end-->
     </div><!-- advantage end-->
-    <div id="hotbox"><!-- hotbox start-->
+    <div id="hotbox">
+        <!-- hotbox start-->
         <div class="box">
             <div class="container">
                 <div class="col-md-12">
@@ -343,44 +358,126 @@
             </div>
         </div>
     </div><!-- hotbox end-->
-    
-    <div class="container" id="content"><!--content start-->
+
+
+    <div class="container" id="content">
+        <!--content start-->
         <center>
             <div class="row">
-                <?php 
-                    getproducts();
-                    
-                ?>         
+                <?php
+                getproducts();
+
+                ?>
             </div>
         </center>
+
+    </div>
+    <!--content end-->
+    <div class="container" id="content">
+        <div class="row" style="margin-left: 2px;margin-bottom:18px;">
+            <a href="http://localhost/Ecom/shop.php?cat_id=1"><img width="99%" src="admin_area/product_images/Smartphone.jpg" alt="Smart Phone"></a>
+        </div>
+    </div>
+    <div class="container" id="content">
+        <!--content start-->
         <center>
-            <a href="shop.php" style="margin-bottom: 10px;" class="btn btn-success btn-outline-danger"> More Products</a>
-        </center>  
-    </div><!--content end-->
+            <div class="row">
+                <?php
+                getAll_phone();
+
+                ?>
+            </div>
+        </center>
+
+        <center>
+            <a href="shop.php?cat_id=1" style="font-size:18px;margin-bottom:25px;height:45px; width:150px;
+            border-radius: 15px;border: 2px solid pink;" class="btn btn-success"> <span>More Products</span> </a>
+        </center>
+
+
+    </div>
+    <!--content end-->
+    <div class="container" id="content">
+        <div class="row" style="margin-left: 3px;margin-bottom:18px;">
+            <a href="http://localhost/Ecom/shop.php?cat_id=3"><img width="99%" src="admin_area/product_images/computer5.png" alt="Laptop"></a>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 10px;" id="content">
+        <!--content start-->
+        <center>
+            <div class="row">
+                <?php
+                get_laptops();
+
+                ?>
+            </div>
+        </center>
+        <?php if (count_laptop() > 4) { ?>
+            <center>
+                <a href="shop.php?cat_id=3" style="font-size:18px;margin-bottom:25px;height:45px; width:150px;border-radius: 15px;border: 2px solid pink;" class="btn btn-success"> <span>More Products</span> </a>
+            </center>
+        <?php } else {
+        } ?>
+
+
+
+    </div>
+    <!--content end-->
+    <div class="container" id="content">
+        <div class="row" style="margin-left: 3px;margin-bottom:18px;">
+            <a href="http://localhost/Ecom/shop.php?cat_id=15"><img width="99%" src="admin_area/product_images/watch.jpg" alt="Watch"></a>
+
+        </div>
+    </div>
+    <div class="container" style="margin-top: 10px;" id="content">
+        <!--content start-->
+        <center>
+            <div class="row">
+                <?php
+                get_smart_watch();
+
+                ?>
+            </div>
+        </center>
+        <?php if (count_laptop() > 4) { ?>
+            <center>
+                <a href="shop.php?cat_id=15" style="font-size:18px;margin-bottom: 15px;height:45px;border-radius: 15px;border: 2px solid pink; width:150px;" class="btn btn-success"> More Products</a>
+            </center>
+        <?php } else {
+        } ?>
+
+
+    </div>
+    <div class="container" id="content">
+        <div class="row" style="margin-left:1px;margin-bottom:18px;">
+            <img width="98%" src="admin_area/product_images/ssl.png" alt="Payment">
+        </div>
+    </div>
+    <!--content end-->
     <!--footer start-->
     <?php
-        include("includes/footer.php");
+    include("includes/footer.php");
     ?>
-    <!--footer end--> 
+    <!--footer end-->
 
-    <?php 
-        if(isset($_SESSION['customer_username'])){
-            $name = $_SESSION['customer_username'];
-            $value = 0;
-            $res = mysqli_fetch_assoc(mysqli_query($con,"SELECT status_ from customer where customer_username='$name'"));
-            $status = $res['status_'];
-            if($status==$value){
-                echo "<script>window.open('logout.php','_self')</script>";
-            }
+
+    <?php
+    if (isset($_SESSION['customer_username'])) {
+        $name = $_SESSION['customer_username'];
+        $value = 0;
+        $res = mysqli_fetch_assoc(mysqli_query($con, "SELECT status_ from customer where customer_username='$name'"));
+        $status = $res['status_'];
+        if ($status == $value) {
+            echo "<script>window.open('logout.php','_self')</script>";
         }
+    }
     ?>
 
     <script src="js/jquery-331.min.js"></script>
     <script src="js/bootstrap-337.min.js"></script>
-   
+
 
 
 </body>
 
 </html>
-
